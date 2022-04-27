@@ -7,18 +7,13 @@ var jsonParser = bodyParser.json();
 const path = require("path");
 const app = express();
 
-/* app.use(express.static(path.join(__dirname, '../front/dist'))); */
-app.use(express.static(path.join(__dirname, './dist')));
 
 app.use(cors());
 
 const PORT = 4000;
 const HOST = "localhost";
 
-app.get('/', async (req, res) => {
-    /* res.send(express.static(path.join(__dirname, '../../front/dist/index.html'))); */
-    res.send(express.static(path.join(__dirname, '../dist/index.html')));
-})
+
 // GET request
 app.get('/users', async (req, res) => {
     const users = await getUsers();
