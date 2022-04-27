@@ -11,26 +11,39 @@ const getDatabase = async () => {
 
 /* getDatabase(); */
 
-const getStudents = async () => {
+const getUsers = async () => {
   const payload = {
     path: `databases/${database_id}/query`,
     method: `POST`,
+    body: {
+      "sorts": [
+          {
+              "property": "CreatedAt",
+              "direction": "ascending"
+          }
+      ]
+    },
   };
   const { results } = await notion.request(payload);
 
-  const students = results.map((page) => {
+  const users = results.map((page) => {
     return {
       id: page.id,
       Name: page.properties.Name.title[0].text.content,
       Phone_Number: page.properties.Phone_Number.rich_text[0].text.content,
+      Img: page.properties.Img.rich_text[0].text.content,
+      Greetings: page.properties.Greetings.rich_text[0].text.content,
       Extra_Information: page.properties.Extra_Information.rich_text[0].text.content,
+      CreatedAt: page.properties.CreatedAt.date.start,
+      Img: page.properties.Img.rich_text[0].text.content,
+      Bookmark: page.properties.Img.rich_text[0].text.content,
     };
   });
 
-  return students;
+  return users;
 };
 
-const createStudent = async (name, phoneNumber, extraInfo) => {
+const createUser = async (name, phoneNumber, extraInfo) => {
 
   const response = await notion.pages.create({
     parent: { database_id: database_id },
@@ -69,6 +82,6 @@ const createStudent = async (name, phoneNumber, extraInfo) => {
 };
 
 module.exports = {
-  getStudents,
-  createStudent,
+  getUsers,
+  createUser,
 };

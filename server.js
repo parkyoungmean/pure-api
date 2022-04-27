@@ -1,6 +1,6 @@
 require('dotenv').config();
 const express = require('express');
-const { getStudents, createStudent } = require('./model/students');
+const { getUsers, createUser } = require('./model/users');
 const cors = require('cors');
 var bodyParser = require('body-parser');
 var jsonParser = bodyParser.json();
@@ -13,8 +13,8 @@ const HOST = "localhost";
 
 
 // GET request
-app.get('/students', async (req, res) => {
-    const users = await getStudents();
+app.get('/users', async (req, res) => {
+    const users = await getUsers();
     res.json(users);
 })
 
