@@ -46,6 +46,6 @@ app.post('/createUser', jsonParser, async (req, res) => {
     }
 });
 
-app.listen(process.env.PORT, () => {
-    console.log("Starting proxy at :" + process.env.PORT);      // localhost:4000
+app.listen(process.env.PORT || PORT, HOST, () => {
+    console.log("Starting proxy at " + HOST + ":" + process.env.PORT);      // localhost:4000
 })
