@@ -4,14 +4,21 @@ const { getUsers, createUser } = require('./model/users');
 const cors = require('cors');
 var bodyParser = require('body-parser');
 var jsonParser = bodyParser.json();
+const path = require("path");
 const app = express();
+
+/* app.use(express.static(path.join(__dirname, '../front/dist'))); */
+app.use(express.static(path.join(__dirname, './dist')));
 
 app.use(cors());
 
 const PORT = 4000;
 const HOST = "localhost";
 
-
+app.get('/', async (req, res) => {
+    /* res.send(express.static(path.join(__dirname, '../../front/dist/index.html'))); */
+    res.send(express.static(path.join(__dirname, '../dist/index.html')));
+})
 // GET request
 app.get('/users', async (req, res) => {
     const users = await getUsers();
@@ -23,7 +30,7 @@ app.get('/users', async (req, res) => {
 // POST name, phhoneNumber, extraInfo
 // Functionality: Make a database entry in a Notion page with the databaseId above
 // localhost:4000/submitFormToNotion
-app.post('/createStudent', jsonParser, async (req, res) => {
+app.post('/createUser', jsonParser, async (req, res) => {
     // req.body
     /* {
         name: "peter",
