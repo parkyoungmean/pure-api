@@ -34,10 +34,14 @@ app.post('/createUser', jsonParser, async (req, res) => {
     } */
     const name = req.body.name;
     const phoneNumber = req.body.phoneNumber;
+    const img = req.body.img;
+    const greetings = req.body.greetings;
     const extraInfo = req.body.extraInfo;
-
+    const createdAt = req.body.createdAt;
+    const bookmark = req.body.bookmark;
+    
     try {
-        const response = await createStudent(name, phoneNumber, extraInfo);
+        const response = await createUser(name, phoneNumber, img, greetings, extraInfo, createdAt, bookmark);
         
         console.log(response);
         console.log("SUCCESS!")
@@ -46,6 +50,6 @@ app.post('/createUser', jsonParser, async (req, res) => {
     }
 });
 
-app.listen(process.env.PORT || PORT, HOST, () => {
+app.listen(process.env.PORT, () => {
     console.log("Starting proxy at " + HOST + ":" + process.env.PORT);      // localhost:4000
 })

@@ -16,12 +16,12 @@ const getUsers = async () => {
     path: `databases/${database_id}/query`,
     method: `POST`,
     body: {
-      "sorts": [
-          {
-              "property": "CreatedAt",
-              "direction": "ascending"
-          }
-      ]
+      sorts: [
+        {
+          property: "CreatedAt",
+          direction: "ascending",
+        },
+      ],
     },
   };
   const { results } = await notion.request(payload);
@@ -33,7 +33,8 @@ const getUsers = async () => {
       Phone_Number: page.properties.Phone_Number.rich_text[0].text.content,
       Img: page.properties.Img.rich_text[0].text.content,
       Greetings: page.properties.Greetings.rich_text[0].text.content,
-      Extra_Information: page.properties.Extra_Information.rich_text[0].text.content,
+      Extra_Information:
+        page.properties.Extra_Information.rich_text[0].text.content,
       CreatedAt: page.properties.CreatedAt.date.start,
       Img: page.properties.Img.rich_text[0].text.content,
       Bookmark: page.properties.Img.rich_text[0].text.content,
@@ -43,8 +44,7 @@ const getUsers = async () => {
   return users;
 };
 
-const createUser = async (name, phoneNumber, extraInfo) => {
-
+const createUser = async (name, phoneNumber, img, Greetings, extraInfo) => {
   const response = await notion.pages.create({
     parent: { database_id: database_id },
     properties: {
@@ -66,11 +66,43 @@ const createUser = async (name, phoneNumber, extraInfo) => {
           },
         ],
       },
+      Img: {
+        rich_text: [
+          {
+            text: {
+              content: img,
+            },
+          },
+        ],
+      },
+      Greetings: {
+        rich_text: [
+          {
+            text: {
+              content: greetings,
+            },
+          },
+        ],
+      },
       Extra_Information: {
         rich_text: [
           {
             text: {
               content: extraInfo,
+            },
+          },
+        ],
+      },
+      CreatedAt: {
+        date: {
+          start: date,
+        },
+      },
+      Bookmark: {
+        rich_text: [
+          {
+            text: {
+              content: bookmark,
             },
           },
         ],
