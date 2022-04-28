@@ -44,12 +44,13 @@ app.post('/createUser', jsonParser, async (req, res) => {
         const response = await createUser(name, phoneNumber, img, greetings, extraInfo, createdAt, bookmark);
         
         console.log(response);
-        console.log("SUCCESS!")
+        console.log("SUCCESS!");
+        res.json(response);
     } catch (error) {
         console.error(error);
     }
 });
 
 app.listen(process.env.PORT, () => {
-    console.log("Starting proxy at " + HOST + ":" + process.env.PORT);      // localhost:4000
+    console.log("Starting proxy at " + HOST + ":" + process.env.PORT);
 })
