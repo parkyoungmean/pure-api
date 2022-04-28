@@ -95,7 +95,7 @@ const createUser = async (name, phoneNumber, img, Greetings, extraInfo, createdA
       },
       CreatedAt: {
         date: {
-          start: date,
+          start: createdAt,
         },
       },
       Bookmark: {
