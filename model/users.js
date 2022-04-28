@@ -44,7 +44,7 @@ const getUsers = async () => {
   return users;
 };
 
-const createUser = async (name, phoneNumber, img, Greetings, extraInfo, createdAt, bookmark) => {
+const createUser = async (name, phoneNumber, img, greetings, extraInfo, createdAt, bookmark) => {
   const response = await notion.pages.create({
     parent: { database_id: database_id },
     properties: {
