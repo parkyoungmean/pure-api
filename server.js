@@ -28,11 +28,13 @@ app.get('/users', async (req, res) => {
 app.post('/createUser', jsonParser, async (req, res) => {
     // req.body
     /* {
+        email: "example@exam.com"
         name: "peter",
         phoneNumber: "000-0000-0000",
         extraInfo: "this is Infomation",
     } */
     const name = req.body.name;
+    const email = req.body.email;
     const phoneNumber = req.body.phoneNumber;
     const img = req.body.img;
     const greetings = req.body.greetings;
@@ -41,7 +43,7 @@ app.post('/createUser', jsonParser, async (req, res) => {
     const bookmark = req.body.bookmark;
     
     try {
-        const response = await createUser(name, phoneNumber, img, greetings, extraInfo, createdAt, bookmark);
+        const response = await createUser(name, email, phoneNumber, img, greetings, extraInfo, createdAt, bookmark);
         
         console.log(response);
         console.log("SUCCESS!");

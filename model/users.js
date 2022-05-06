@@ -19,10 +19,10 @@ const getUsers = async () => {
       sorts: [
         {
           property: "CreatedAt",
-          direction: "ascending",
+          direction: "descending",
         },
       ],
-    },
+    },  
   };
   const { results } = await notion.request(payload);
 
@@ -44,7 +44,7 @@ const getUsers = async () => {
   return users;
 };
 
-const createUser = async (name, phoneNumber, img, greetings, extraInfo, createdAt, bookmark) => {
+const createUser = async (name, email, phoneNumber, img, greetings, extraInfo, createdAt, bookmark) => {
   const response = await notion.pages.create({
     parent: { database_id: database_id },
     properties: {
@@ -53,6 +53,15 @@ const createUser = async (name, phoneNumber, img, greetings, extraInfo, createdA
           {
             text: {
               content: name,
+            },
+          },
+        ],
+      },
+      Email: {
+        rich_text: [
+          {
+            text: {
+              content: email,
             },
           },
         ],
