@@ -30,14 +30,15 @@ const getUsers = async () => {
     return {
       id: page.id,
       Name: page.properties.Name.title[0].text.content,
-      Phone_Number: page.properties.Phone_Number.rich_text[0].text.content,
+      Email: page.properties.Email.rich_text[0].text.content,
+      PhoneNumber: page.properties.Phone_Number.rich_text[0].text.content,
       Img: page.properties.Img.rich_text[0].text.content,
       Greetings: page.properties.Greetings.rich_text[0].text.content,
-      Extra_Information:
+      ExtraInformation:
         page.properties.Extra_Information.rich_text[0].text.content,
       CreatedAt: page.properties.CreatedAt.date.start,
       Img: page.properties.Img.rich_text[0].text.content,
-      Bookmark: page.properties.Img.rich_text[0].text.content,
+      Bookmark: page.properties.Bookmark.rich_text[0].text.content,
     };
   });
 
