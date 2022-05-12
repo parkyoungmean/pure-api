@@ -1,6 +1,6 @@
 require('dotenv').config();
 const express = require('express');
-const { getUsers, createUser } = require('./model/users');
+const { getUsers, createUser, updateUser } = require('./model/users');
 const cors = require('cors');
 var bodyParser = require('body-parser');
 var jsonParser = bodyParser.json();
@@ -22,9 +22,7 @@ app.get('/users', async (req, res) => {
 
 
 // POST request
-// POST name, phhoneNumber, extraInfo
-// Functionality: Make a database entry in a Notion page with the databaseId above
-// localhost:4000/submitFormToNotion
+/* Create User */
 app.post('/createUser', jsonParser, async (req, res) => {
     // req.body
     /* {
@@ -40,13 +38,38 @@ app.post('/createUser', jsonParser, async (req, res) => {
     const greetings = req.body.greetings;
     const extraInfo = req.body.extraInfo;
     const createdAt = req.body.createdAt;
+    const updatedAt = req.body.updatedAt;
     const bookmark = req.body.bookmark;
     
     try {
-        const response = await createUser(name, email, phoneNumber, img, greetings, extraInfo, createdAt, bookmark);
+        const response = await createUser(name, email, phoneNumber, img, greetings, extraInfo, createdAt, updatedAt, bookmark);
         
         console.log(response);
-        console.log("SUCCESS!");
+        console.log("CREATE SUCCESS!");
+        res.json(response);
+    } catch (error) {
+        console.error(error);
+    }
+});
+
+/* Update User */
+app.post('/updateUser', jsonParser, async (req, res) => {
+    const id = req.body.id;
+    const name = req.body.name;
+    const email = req.body.email;
+    const phoneNumber = req.body.phoneNumber;
+    const img = req.body.img;
+    const greetings = req.body.greetings;
+    const extraInfo = req.body.extraInfo;
+    const createdAt = req.body.createdAt;
+    const updatedAt = req.body.updatedAt;
+    const bookmark = req.body.bookmark;
+    
+    try {
+        const response = await updateUser(id, name, email, phoneNumber, img, greetings, extraInfo, createdAt, updatedAt, bookmark);
+        
+        console.log(response);
+        console.log("UPDATE SUCCESS!");
         res.json(response);
     } catch (error) {
         console.error(error);

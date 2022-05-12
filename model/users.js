@@ -37,7 +37,7 @@ const getUsers = async () => {
       ExtraInformation:
         page.properties.Extra_Information.rich_text[0].text.content,
       CreatedAt: page.properties.CreatedAt.date.start,
-      Img: page.properties.Img.rich_text[0].text.content,
+      UpdatedAt: page.properties.UpdatedAt.date.start,
       Bookmark: page.properties.Bookmark.rich_text[0].text.content,
     };
   });
@@ -45,7 +45,7 @@ const getUsers = async () => {
   return users;
 };
 
-const createUser = async (name, email, phoneNumber, img, greetings, extraInfo, createdAt, bookmark) => {
+const createUser = async (name, email, phoneNumber, img, greetings, extraInfo, createdAt, updatedAt, bookmark) => {
   const response = await notion.pages.create({
     parent: { database_id: database_id },
     properties: {
@@ -108,11 +108,120 @@ const createUser = async (name, email, phoneNumber, img, greetings, extraInfo, c
           start: createdAt,
         },
       },
+      UpdatedAt: {
+        date: {
+          start: updatedAt,
+        },
+      },
       Bookmark: {
         rich_text: [
           {
             text: {
               content: bookmark,
+            },
+          },
+        ],
+      },
+      Status: {
+        rich_text: [
+          {
+            text: {
+              content: 'created',
+            },
+          },
+        ],
+      },
+    },
+  });
+
+  return response;
+};
+
+
+
+const updateUser = async (id, name, email, phoneNumber, img, greetings, extraInfo, createdAt, updatedAt, bookmark) => {
+  const response = await notion.pages.update({
+    parent: { database_id: database_id },
+    page_id: id,
+    properties: {
+      Name: {
+        title: [
+          {
+            text: {
+              content: name,
+            },
+          },
+        ],
+      },
+      Email: {
+        rich_text: [
+          {
+            text: {
+              content: email,
+            },
+          },
+        ],
+      },
+      Phone_Number: {
+        rich_text: [
+          {
+            text: {
+              content: phoneNumber,
+            },
+          },
+        ],
+      },
+      Img: {
+        rich_text: [
+          {
+            text: {
+              content: img,
+            },
+          },
+        ],
+      },
+      Greetings: {
+        rich_text: [
+          {
+            text: {
+              content: greetings,
+            },
+          },
+        ],
+      },
+      Extra_Information: {
+        rich_text: [
+          {
+            text: {
+              content: extraInfo,
+            },
+          },
+        ],
+      },
+      CreatedAt: {
+        date: {
+          start: createdAt,
+        },
+      },
+      UpdatedAt: {
+        date: {
+          start: updatedAt,
+        },
+      },
+      Bookmark: {
+        rich_text: [
+          {
+            text: {
+              content: bookmark,
+            },
+          },
+        ],
+      },
+      Status: {
+        rich_text: [
+          {
+            text: {
+              content: 'updated',
             },
           },
         ],
@@ -126,4 +235,5 @@ const createUser = async (name, email, phoneNumber, img, greetings, extraInfo, c
 module.exports = {
   getUsers,
   createUser,
+  updateUser,
 };
