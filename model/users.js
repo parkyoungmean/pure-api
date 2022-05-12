@@ -22,6 +22,9 @@ const getUsers = async () => {
           direction: "descending",
         },
       ],
+      filter: {
+        or: [{ property: "Status", rich_text: { does_not_contain: "deleted" }}],
+      },
     },
   };
   const { results } = await notion.request(payload);
