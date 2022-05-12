@@ -1,6 +1,6 @@
 require('dotenv').config();
 const express = require('express');
-const { getUsers, createUser, updateUser } = require('./model/users');
+const { getUsers, createUser, updateUser, deleteUser } = require('./model/users');
 const cors = require('cors');
 var bodyParser = require('body-parser');
 var jsonParser = bodyParser.json();
@@ -70,6 +70,21 @@ app.post('/updateUser', jsonParser, async (req, res) => {
         
         console.log(response);
         console.log("UPDATE SUCCESS!");
+        res.json(response);
+    } catch (error) {
+        console.error(error);
+    }
+});
+
+/* Delete User */
+app.post('/deleteUser', jsonParser, async (req, res) => {
+    const id = req.body.id;
+
+    try {
+        const response = await deleteUser(id);
+
+        console.log(response);
+        console.log("DELETE SUCCESS!");
         res.json(response);
     } catch (error) {
         console.error(error);

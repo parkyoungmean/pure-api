@@ -22,7 +22,7 @@ const getUsers = async () => {
           direction: "descending",
         },
       ],
-    },  
+    },
   };
   const { results } = await notion.request(payload);
 
@@ -45,7 +45,17 @@ const getUsers = async () => {
   return users;
 };
 
-const createUser = async (name, email, phoneNumber, img, greetings, extraInfo, createdAt, updatedAt, bookmark) => {
+const createUser = async (
+  name,
+  email,
+  phoneNumber,
+  img,
+  greetings,
+  extraInfo,
+  createdAt,
+  updatedAt,
+  bookmark
+) => {
   const response = await notion.pages.create({
     parent: { database_id: database_id },
     properties: {
@@ -126,7 +136,7 @@ const createUser = async (name, email, phoneNumber, img, greetings, extraInfo, c
         rich_text: [
           {
             text: {
-              content: 'created',
+              content: "created",
             },
           },
         ],
@@ -137,9 +147,18 @@ const createUser = async (name, email, phoneNumber, img, greetings, extraInfo, c
   return response;
 };
 
-
-
-const updateUser = async (id, name, email, phoneNumber, img, greetings, extraInfo, createdAt, updatedAt, bookmark) => {
+const updateUser = async (
+  id,
+  name,
+  email,
+  phoneNumber,
+  img,
+  greetings,
+  extraInfo,
+  createdAt,
+  updatedAt,
+  bookmark
+) => {
   const response = await notion.pages.update({
     parent: { database_id: database_id },
     page_id: id,
@@ -221,7 +240,26 @@ const updateUser = async (id, name, email, phoneNumber, img, greetings, extraInf
         rich_text: [
           {
             text: {
-              content: 'updated',
+              content: "updated",
+            },
+          },
+        ],
+      },
+    },
+  });
+
+  return response;
+};
+
+const deleteUser = async (id) => {
+  const response = await notion.pages.update({
+    page_id: id,
+    properties: {
+      Status: {
+        rich_text: [
+          {
+            text: {
+              content: "deleted",
             },
           },
         ],
@@ -236,4 +274,5 @@ module.exports = {
   getUsers,
   createUser,
   updateUser,
+  deleteUser,
 };
