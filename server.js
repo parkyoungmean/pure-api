@@ -2,13 +2,19 @@ require('dotenv').config();
 const express = require('express');
 const { getUsers, createUser, updateUser, deleteUser } = require('./model/users');
 const cors = require('cors');
-var bodyParser = require('body-parser');
-var jsonParser = bodyParser.json();
 const path = require("path");
 const app = express();
 
+const schoolRoute = require('./routes/school');     // school 라우트를 추가
 
 app.use(cors());
+
+//MiddleWare
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
+//Import Router Middlewares
+app.use('/school', schoolRoute);           // school 라우트를 추가하고 기본 경로로 /school 사용
 
 const PORT = 4000;
 const HOST = "localhost";
@@ -23,7 +29,7 @@ app.get('/users', async (req, res) => {
 
 // POST request
 /* Create User */
-app.post('/createUser', jsonParser, async (req, res) => {
+app.post('/createUser', async (req, res) => {
     // req.body
     /* {
         email: "example@exam.com"
@@ -53,7 +59,7 @@ app.post('/createUser', jsonParser, async (req, res) => {
 });
 
 /* Update User */
-app.post('/updateUser', jsonParser, async (req, res) => {
+app.post('/updateUser', async (req, res) => {
     const id = req.body.id;
     const name = req.body.name;
     const email = req.body.email;
@@ -77,7 +83,7 @@ app.post('/updateUser', jsonParser, async (req, res) => {
 });
 
 /* Delete User */
-app.post('/deleteUser', jsonParser, async (req, res) => {
+app.post('/deleteUser', async (req, res) => {
     const id = req.body.id;
 
     try {
