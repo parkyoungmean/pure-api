@@ -19,7 +19,7 @@ const getSchools = async () => {
       sorts: [
         {
           property: "CreatedAt",
-          direction: "descending",
+          direction: "ascending",
         },
       ],
       filter: {
@@ -173,7 +173,133 @@ const createSchool = async (
   return response;
 };
 
+
+const updateSchool = async (
+  id,
+  name,
+  subtitle,
+  img,
+  description,
+  curriculum,
+  registration,
+  graduate,
+  color,
+  createdAt,
+  updatedAt,
+  bookmark
+) => {
+  const response = await notion.pages.update({
+    parent: { database_id: database_id },
+    page_id: id,
+    properties: {
+      Name: {
+        title: [
+          {
+            text: {
+              content: name,
+            },
+          },
+        ],
+      },
+      Subtitle: {
+        rich_text: [
+          {
+            text: {
+              content: subtitle,
+            },
+          },
+        ],
+      },
+      Img: {
+        rich_text: [
+          {
+            text: {
+              content: img,
+            },
+          },
+        ],
+      },
+      Description: {
+        rich_text: [
+          {
+            text: {
+              content: description,
+            },
+          },
+        ],
+      },
+      Curriculum: {
+        rich_text: [
+          {
+            text: {
+              content: curriculum,
+            },
+          },
+        ],
+      },
+      Registration: {
+        rich_text: [
+          {
+            text: {
+              content: registration,
+            },
+          },
+        ],
+      },
+      Graduate: {
+        rich_text: [
+          {
+            text: {
+              content: graduate,
+            },
+          },
+        ],
+      },
+      Color: {
+        rich_text: [
+          {
+            text: {
+              content: color,
+            },
+          },
+        ],
+      },
+      CreatedAt: {
+        date: {
+          start: createdAt,
+        },
+      },
+      UpdatedAt: {
+        date: {
+          start: updatedAt,
+        },
+      },
+      Bookmark: {
+        rich_text: [
+          {
+            text: {
+              content: bookmark,
+            },
+          },
+        ],
+      },
+      Status: {
+        rich_text: [
+          {
+            text: {
+              content: "updated",
+            },
+          },
+        ],
+      },
+    },
+  });
+
+  return response;
+};
+
 module.exports = {
     getSchools,
     createSchool,
+    updateSchool,
 }
