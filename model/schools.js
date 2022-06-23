@@ -298,8 +298,30 @@ const updateSchool = async (
   return response;
 };
 
+
+const deleteSchool = async (id) => {
+  const response = await notion.pages.update({
+    page_id: id,
+    properties: {
+      Status: {
+        rich_text: [
+          {
+            text: {
+              content: "deleted",
+            },
+          },
+        ],
+      },
+    },
+  });
+
+  return response;
+};
+
+
 module.exports = {
     getSchools,
     createSchool,
     updateSchool,
+    deleteSchool,
 }

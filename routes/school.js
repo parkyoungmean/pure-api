@@ -4,7 +4,7 @@ const app = express();
 
 app.use(express.json())
 
-const { getSchools, createSchool, updateSchool } = require('../model/schools');
+const { getSchools, createSchool, updateSchool, deleteSchool } = require('../model/schools');
 
 router.get('/', async (req, res) => {
     const schools = await getSchools();
@@ -69,5 +69,21 @@ router.post('/updateSchool', async (req, res) => {
         console.error(error);
     }
 });
+
+/* Delete School */
+router.post('/deleteSchool', async (req, res) => {
+    const id = req.body.id;
+
+    try {
+        const response = await deleteSchool(id);
+
+        console.log(response);
+        console.log("SCHOOL DELETE SUCCESS!");
+        res.json(response);
+    } catch (error) {
+        console.error(error);
+    }
+});
+
 
 module.exports = router;
