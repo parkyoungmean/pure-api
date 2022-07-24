@@ -5,7 +5,9 @@ const cors = require('cors');
 const path = require("path");
 const app = express();
 
-const schoolRoute = require('./routes/school');     // school 라우트를 추가
+const schoolRoute = require('./routes/school');           // school 라우트를 추가
+const noticeRoute = require('./routes/notice');           // notice 라우트를 추가
+const publicityRoute = require('./routes/publicity');     // publicity 라우트를 추가
 
 app.use(cors());
 
@@ -15,6 +17,8 @@ app.use(express.urlencoded({ extended: false }));
 
 //Import Router Middlewares
 app.use('/school', schoolRoute);           // school 라우트를 추가하고 기본 경로로 /school 사용
+app.use('/notice', noticeRoute);           // notice 라우트를 추가하고 기본 경로로 /notice 사용
+app.use('/publicity', publicityRoute);           // publicity 라우트를 추가하고 기본 경로로 /publicity 사용
 
 const PORT = 4000;
 const HOST = "localhost";
