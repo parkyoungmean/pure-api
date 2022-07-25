@@ -4,7 +4,13 @@ const app = express();
 
 app.use(express.json())
 
-const { createPublicity } = require('../model/publicitys');
+const { getPublicitys, createPublicity } = require('../model/publicitys');
+
+router.get('/', async (req, res) => {
+    const publicitys = await getPublicitys();
+    console.log('publicitys:', publicitys);
+    res.json(publicitys);
+});
 
 /* create - 슬라이드 광고 추가를 위한 메서드 */
 router.post('/createPublicity', async (req, res) => {
