@@ -17,12 +17,11 @@ router.get('/', async (req, res) => {
 /* create - 슬라이드 광고 추가를 위한 메서드 */
 router.post('/createPublicity', async (req, res) => {
     console.log('여기는 슬라이드 광고 추가 라우터입니다.');
+    console.log(req.body);
 
     const img = req.body.img;
 
-    if (req.body.mobileImg) {
-        const mobileImg = req.body.mobileImg;
-    } else {
+    if (req.body.mobileImg === '') {
         const mobileImg = req.body.img;
     }
     
