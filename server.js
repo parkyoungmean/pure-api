@@ -1,8 +1,10 @@
 require('dotenv').config();
 const express = require('express');
+const axios = require('axios');
 const { getUsers, createUser, updateUser, deleteUser } = require('./model/users');
 const cors = require('cors');
 const path = require("path");
+
 const app = express();
 
 const schoolRoute = require('./routes/school');           // school 라우트를 추가
@@ -100,6 +102,72 @@ app.post('/deleteUser', async (req, res) => {
         console.error(error);
     }
 });
+
+/* Upload Image */
+/* app.post('/image/uploadImage', async (req, res) => {
+    const id = req.body.id;
+
+    console.log('uploadImage:', req);
+    console.log('uploadImageName:', req.body);
+    
+    
+    try {
+        uploadFile(req.file);
+        const response = await deleteUser(id);
+
+        console.log(response);
+        console.log("DELETE SUCCESS!");
+        res.json(response);
+    } catch (error) {
+        console.error(error);
+    }
+}); */
+
+
+
+/* async function uploadFile(file) {
+    const fileInput = document.getElementById("upload");
+    const upload = (file) => {
+        if (file && file.size < 5000000) {
+            const formData = new FormData();
+
+            formData.append("image", file);
+            try {
+                await axios.post("https://api.imgur.com/3/image", {
+                method: "POST",
+                headers: {
+                    Authorization: "Client-ID 65a266c7ee29bf5",
+                    Accept: "application/json",
+                },
+                body: formData,
+                body: file,
+            })
+                .then((response) => response.json())
+                .then((response) => {
+                    console.log(response);
+                    // do Something
+                });
+        } else {
+            console.error("파일 용량 초과");
+        }
+    };
+
+    fileInput &&
+        fileInput.addEventListener("change", () => {
+            upload(fileInput.files[0]);
+        });
+            } catch (error) {
+                console.error(error);
+            }
+            
+}
+
+uploadFile(); */
+
+
+
+
+
 
 app.listen(process.env.PORT, () => {
     console.log("Starting proxy at " + HOST + ":" + process.env.PORT);
