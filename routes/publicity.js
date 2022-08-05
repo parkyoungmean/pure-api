@@ -21,7 +21,7 @@ router.post('/createPublicity', async (req, res) => {
 
     const img = req.body.img;
 
-    if (req.body.mobileImg === '') {
+    if (req.body.mobileImg.length === 0) {
         const mobileImg = req.body.img;
     }
     
