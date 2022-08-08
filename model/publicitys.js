@@ -41,6 +41,7 @@ const getPublicitys = async () => {
         Condition: page.properties.Condition.rich_text[0].text.content,
         Belong: page.properties.Belong.rich_text[0].text.content,
         Author: page.properties.Author.rich_text[0].text.content,
+        Position: page.properties.Position.rich_text[0].text.content,
         Size: page.properties.Size.rich_text[0].text.content,
         Color: page.properties.Color.rich_text[0].text.content,
         CreatedAt: page.properties.CreatedAt.date.start,
@@ -52,7 +53,7 @@ const getPublicitys = async () => {
     return publicitys;
 };
 
-const createPublicity = async (img, mobileImg, title, subtitle, content, condition, belong, author, size, color, createdAt, updatedAt) => {
+const createPublicity = async (img, mobileImg, title, subtitle, content, condition, belong, author, position, size, color, createdAt, updatedAt) => {
     const response = await notion.pages.create({
         parent: { database_id: database_id },
         properties: {
@@ -124,6 +125,15 @@ const createPublicity = async (img, mobileImg, title, subtitle, content, conditi
                 {
                     text: {
                         content: author,
+                    },
+                },
+                ],
+            },
+            Position: {
+                rich_text: [
+                {
+                    text: {
+                        content: position,
                     },
                 },
                 ],

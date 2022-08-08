@@ -21,10 +21,6 @@ router.post('/createPublicity', async (req, res) => {
 
     const img = req.body.img;
     const mobileImg = req.body.mobileImg;
-
-    /* if (req.body.mobileImg.length === 0) {
-        const mobileImg = req.body.img;
-    } */
     
     const title = req.body.title;
     const subtitle = req.body.subtitle;
@@ -32,8 +28,9 @@ router.post('/createPublicity', async (req, res) => {
     const condition = req.body.condition;                    // 광고 or 공지
     const belong = "전체";                                    // 전체 or ~학교
     const author = "관리자";
-    const size = JSON.stringify(req.body.size);
-    const color = JSON.stringify(req.body.color);
+    const position = JSON.stringify(req.body.position);      // 전체 글의 x, y의 위치
+    const size = JSON.stringify(req.body.size);              // 전체 글의 글자 크기
+    const color = JSON.stringify(req.body.color);            // 전체 글의 글자색
     const createdAt = req.body.createdAt;
     const updatedAt = req.body.updatedAt;
 
@@ -44,7 +41,7 @@ router.post('/createPublicity', async (req, res) => {
 
        /*  uploadFile(JSON.parse(img)); */
 
-        const response = await createPublicity(img, mobileImg, title, subtitle, content, condition, belong, author, size, color, createdAt, updatedAt);
+        const response = await createPublicity(img, mobileImg, title, subtitle, content, condition, belong, author, position, size, color, createdAt, updatedAt);
 
         console.log('결과:', response);
         console.log('CREATE SUCCESS PUBLICITY!');
@@ -53,46 +50,6 @@ router.post('/createPublicity', async (req, res) => {
         console.error(error);
     }
 });
-
-
-/* async function uploadFile(file) {
-    const fileInput = document.getElementById("upload");
-    const upload = (file) => {
-        if (file && file.size < 5000000) {
-            const formData = new FormData();
-
-            formData.append("image", file);
-            try {
-                await axios.post("https://api.imgur.com/3/image", {
-                method: "POST",
-                headers: {
-                    Authorization: "Client-ID 65a266c7ee29bf5",
-                    Accept: "application/json",
-                },
-                body: formData,
-            })
-                .then((response) => response.json())
-                .then((response) => {
-                    console.log(response);
-                    // do Something
-                });
-        } else {
-            console.error("파일 용량 초과");
-        }
-    };
-
-    fileInput &&
-        fileInput.addEventListener("change", () => {
-            upload(fileInput.files[0]);
-        });
-            } catch (error) {
-                console.error(error);
-            }
-            
-}
-
-uploadFile(); */
-
 
 
 module.exports = router;
