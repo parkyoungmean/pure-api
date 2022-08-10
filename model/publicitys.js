@@ -196,7 +196,7 @@ const createPublicity = async (
   return response;
 };
 
-const updateSchool = async (
+const updatePublicity = async (
   id,
   img,
   mobileImg,
