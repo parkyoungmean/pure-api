@@ -6,7 +6,7 @@ const app = express();
 
 app.use(express.json())
 
-const { getPublicitys, createPublicity, updatePublicity } = require('../model/publicitys');
+const { getPublicitys, createPublicity, updatePublicity, deletePublicity } = require('../model/publicitys');
 
 router.get('/', async (req, res) => {
     const publicitys = await getPublicitys();
@@ -88,5 +88,19 @@ router.post('/updatePublicity', async (req, res) => {
     }
 });
 
+/* Delete Publicity - 슬라이드 광고 삭제를 위한 메서드 */
+router.post('/deletePublicity', async (req, res) => {
+    const id = req.body.id;
+
+    try {
+        const response = await deletePublicity(id);
+
+        console.log(response);
+        console.log("PUBLICITY DELETE SUCCESS!");
+        res.json(response);
+    } catch (error) {
+        console.error(error);
+    }
+});
 
 module.exports = router;

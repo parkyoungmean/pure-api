@@ -340,8 +340,28 @@ const updatePublicity = async (
   return response;
 };
 
+const deletePublicity = async (id) => {
+    const response = await notion.pages.update({
+        page_id: id,
+        properties: {
+            Status: {
+                rich_text: [
+                    {
+                        text: {
+                            content: "deleted",
+                        },
+                    },
+                ],
+            },
+        },
+    });
+    return response;
+};
+
+
 module.exports = {
   getPublicitys,
   createPublicity,
   updatePublicity,
+  deletePublicity,
 };
