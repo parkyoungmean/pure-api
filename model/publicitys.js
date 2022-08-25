@@ -1,6 +1,6 @@
 const { Client } = require("@notionhq/client");
 const notion = new Client({ auth: process.env.NOTION_API_KEY });
-const database_id = process.env.NOTICES_DATABASE_ID;
+const database_id = process.env.PUBLICITIES_DATABASE_ID;
 
 const getDatabase = async () => {
   const response = await notion.databases.retrieve({
