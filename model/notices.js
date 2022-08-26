@@ -48,7 +48,90 @@ const getNotices = async () => {
     return notices;
 };
 
+const createNotice = async (title, img, content, condition, belong, author, createdAt, updatedAt) => {
+    const response = await notion.pages.create({
+        parent: { database_id: database_id },
+        properties: {
+            Title: {
+                title: [
+                {
+                    text: {
+                        content: title,
+                    },
+                },
+                ],
+            },
+            Image: {
+                rich_text: [
+                {
+                    text: {
+                        content: img,
+                    },
+                },
+                ],
+            },
+            Content: {
+                rich_text: [
+                {
+                    text: {
+                        content: content,
+                    },
+                },
+                ],
+            },
+            Condition: {
+                rich_text: [
+                {
+                    text: {
+                        content: condition,
+                    },
+                },
+                ],
+            },
+            Belong: {
+                rich_text: [
+                {
+                    text: {
+                        content: belong,
+                    },
+                },
+                ],
+            },
+            Author: {
+                rich_text: [
+                {
+                    text: {
+                        content: author,
+                    },
+                },
+                ],
+            },
+            CreatedAt: {
+                date: {
+                    start: createdAt,
+                },
+            },
+            UpdatedAt: {
+                date: {
+                    start: updatedAt,
+                },
+            },
+            Status: {
+                rich_text: [
+                {
+                    text: {
+                    content: "created",
+                    },
+                },
+                ],
+            },
+        },
+    });
+
+    return response;
+}
 
 module.exports = {
+    createNotice,
     getNotices,
 }
