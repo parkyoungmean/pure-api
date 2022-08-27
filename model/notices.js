@@ -34,6 +34,7 @@ const getNotices = async () => {
         return {
             id: page.id,
             Title: page.properties.Title.title[0].text.content,
+            Primary: page.properties.Primary.checkbox,
             Content: page.properties.Content.rich_text[0].text.content,
             Image: page.properties.Image.rich_text[0].text.content,
             Condition: page.properties.Condition.rich_text[0].text.content,
@@ -48,7 +49,47 @@ const getNotices = async () => {
     return notices;
 };
 
-const createNotice = async (title, img, content, condition, belong, author, createdAt, updatedAt) => {
+const getPrimaryNotices = async () => {
+    const payload = {
+        path: `databases/${database_id}/query`,
+        method: `POST`,
+        body: {
+            sorts: [
+            {
+                property: "CreatedAt",
+                direction: "descending",
+            },
+            ],
+            filter: {
+                and: [
+                    { property: "Primary", checkbox: { equals: true } },
+                    { property: "Status", rich_text: { does_not_contain: "deleted" } },
+                ],
+            },
+        },
+    };
+    const { results } = await notion.request(payload);
+
+    const primaryNotices = results.map((page) => {
+        return {
+            id: page.id,
+            Title: page.properties.Title.title[0].text.content,
+            Primary: page.properties.Primary.checkbox,
+            Content: page.properties.Content.rich_text[0].text.content,
+            Image: page.properties.Image.rich_text[0].text.content,
+            Condition: page.properties.Condition.rich_text[0].text.content,
+            Belong: page.properties.Belong.rich_text[0].text.content,
+            Author: page.properties.Author.rich_text[0].text.content,
+            CreatedAt: page.properties.CreatedAt.date.start,
+            UpdatedAt: page.properties.UpdatedAt.date.start,
+            Status: page.properties.Status.rich_text[0].text.content,
+        };
+    });
+
+    return primaryNotices;
+};
+
+const createNotice = async (primary, title, img, content, condition, belong, author, createdAt, updatedAt) => {
     const response = await notion.pages.create({
         parent: { database_id: database_id },
         properties: {
@@ -60,6 +101,9 @@ const createNotice = async (title, img, content, condition, belong, author, crea
                     },
                 },
                 ],
+            },
+            Primary: {
+                checkbox: primary,
             },
             Image: {
                 rich_text: [
@@ -134,4 +178,5 @@ const createNotice = async (title, img, content, condition, belong, author, crea
 module.exports = {
     createNotice,
     getNotices,
+    getPrimaryNotices,
 }
