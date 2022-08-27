@@ -49,6 +49,7 @@ const getNotices = async () => {
     return notices;
 };
 
+/* 메인(Primary) 공지사항 글들을 얻기 */
 const getPrimaryNotices = async () => {
     const payload = {
         path: `databases/${database_id}/query`,
@@ -175,8 +176,96 @@ const createNotice = async (primary, title, img, content, condition, belong, aut
     return response;
 }
 
+const updateNotice = async (id, primary, title, img, content, condition, belong, author, createdAt, updatedAt) => {
+    const response = await notion.pages.update({
+        parent: { database_id: database_id },
+        page_id: id,
+        properties: {
+            Title: {
+                title: [
+                {
+                    text: {
+                        content: title,
+                    },
+                },
+                ],
+            },
+            Primary: {
+                checkbox: primary,
+            },
+            Image: {
+                rich_text: [
+                {
+                    text: {
+                        content: img,
+                    },
+                },
+                ],
+            },
+            Content: {
+                rich_text: [
+                {
+                    text: {
+                        content: content,
+                    },
+                },
+                ],
+            },
+            Condition: {
+                rich_text: [
+                {
+                    text: {
+                        content: condition,
+                    },
+                },
+                ],
+            },
+            Belong: {
+                rich_text: [
+                {
+                    text: {
+                        content: belong,
+                    },
+                },
+                ],
+            },
+            Author: {
+                rich_text: [
+                {
+                    text: {
+                        content: author,
+                    },
+                },
+                ],
+            },
+            CreatedAt: {
+                date: {
+                    start: createdAt,
+                },
+            },
+            UpdatedAt: {
+                date: {
+                    start: updatedAt,
+                },
+            },
+            Status: {
+                rich_text: [
+                {
+                    text: {
+                    content: "updated",
+                    },
+                },
+                ],
+            },
+        },
+    });
+
+    return response;
+}
+
 module.exports = {
     createNotice,
     getNotices,
     getPrimaryNotices,
+    updateNotice,
 }
