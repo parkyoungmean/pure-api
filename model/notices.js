@@ -263,9 +263,28 @@ const updateNotice = async (id, primary, title, img, content, condition, belong,
     return response;
 }
 
+const deleteNotice = async (id) => {
+    const response = await notion.pages.update({
+        page_id: id,
+        properties: {
+            Status: {
+                rich_text: [
+                    {
+                        text: {
+                            content: "deleted",
+                        },
+                    },
+                ],
+            },
+        },
+    });
+    return response;   
+}
+
 module.exports = {
     createNotice,
     getNotices,
     getPrimaryNotices,
     updateNotice,
+    deleteNotice,
 }

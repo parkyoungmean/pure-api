@@ -4,7 +4,7 @@ const app = express();
 
 app.use(express.json())
 
-const { getNotices, getPrimaryNotices, createNotice, updateNotice } = require('../model/notices');
+const { getNotices, getPrimaryNotices, createNotice, updateNotice, deleteNotice } = require('../model/notices');
 
 /* create - 공지사항 추가를 위한 메서드 */
 router.post('/createNotice', async (req, res) => {
@@ -24,7 +24,7 @@ router.post('/createNotice', async (req, res) => {
         const response = await createNotice(primary, title, img, content, condition, belong, author, createdAt, updatedAt);
 
         console.log(response);
-        console.log('CREATE SUCCESS NOTICE!');
+        console.log('NOTICE CREATE SUCCESS!');
         res.json(response);
     } catch (error) {
         console.error(error);
@@ -67,7 +67,22 @@ router.post('/updateNotice', async (req, res) => {
         const response = await updateNotice(id, primary, title, img, content, condition, belong, author, createdAt, updatedAt);
 
         console.log(response);
-        console.log('UPDATE SUCCESS NOTICE!');
+        console.log('NOTICE UPDATE SUCCESS !');
+        res.json(response);
+    } catch (error) {
+        console.error(error);
+    }
+});
+
+/* delete Notice - 공지사항 삭제를 위한 메서드 */
+router.post('/deleteNotice', async (req, res) => {
+    const id = req.body.id;
+
+    try {
+        const response = await deleteNotice(id);
+
+        console.log(response);
+        console.log("NOTICE DELETE SUCCESS!");
         res.json(response);
     } catch (error) {
         console.error(error);
