@@ -214,8 +214,27 @@ const updateGallery = async (id, title, imgs01, imgs02, category, belong, author
     return response;
 }
 
+const deleteGallery = async (id) => {
+    const response = await notion.pages.update({
+        page_id: id,
+        properties: {
+            Status: {
+                rich_text: [
+                    {
+                        text: {
+                            content: "deleted",
+                        },
+                    },
+                ],
+            },
+        },
+    });
+    return response;   
+}
+
 module.exports = {
     createGallery,
     getGallery,
     updateGallery,
+    deleteGallery,
 }

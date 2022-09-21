@@ -4,7 +4,7 @@ const app = express();
 
 app.use(express.json())
 
-const { getGallery, createGallery, updateGallery } = require('../model/gallery');
+const { getGallery, createGallery, updateGallery, deleteGallery } = require('../model/gallery');
 
 /* create - 갤러리 추가를 위한 메서드 */
 router.post('/createGallery', async (req, res) => {
@@ -58,6 +58,21 @@ router.post('/updateGallery', async (req, res) => {
 
         console.log(response);
         console.log('GALLERY UPDATE SUCCESS!');
+        res.json(response);
+    } catch (error) {
+        console.error(error);
+    }
+});
+
+/* delete Gallery - 갤러리 삭제를 위한 메서드 */
+router.post('/deleteGallery', async (req, res) => {
+    const id = req.body.id;
+
+    try {
+        const response = await deleteGallery(id);
+
+        console.log(response);
+        console.log("GALLERY DELETE SUCCESS!");
         res.json(response);
     } catch (error) {
         console.error(error);
