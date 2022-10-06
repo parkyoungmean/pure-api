@@ -70,7 +70,7 @@ const getPrimaryNotices = async () => {
         },
     };
     const { results } = await notion.request(payload);
-
+    
     const primaryNotices = results.map((page) => {
         return {
             id: page.id,

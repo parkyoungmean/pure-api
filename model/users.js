@@ -9,7 +9,7 @@ const getDatabase = async () => {
   console.log(response);
 };
 
-/* getDatabase(); */
+getDatabase();
 
 const getUsers = async () => {
   const payload = {

@@ -11,6 +11,7 @@ const schoolRoute = require('./routes/school');           // school 라우트를
 const noticeRoute = require('./routes/notice');           // notice 라우트를 추가
 const publicityRoute = require('./routes/publicity');     // publicity 라우트를 추가
 const galleryRoute = require('./routes/gallery');             // gallery 라우트를 추가
+const worshipRoute = require('./routes/worship');             // worship 라우트를 추가
 
 app.use(cors());
 
@@ -23,6 +24,8 @@ app.use('/school', schoolRoute);                  // school 라우트를 추가�
 app.use('/notice', noticeRoute);                  // notice 라우트를 추가하고 기본 경로로 /notice 사용
 app.use('/publicity', publicityRoute);            // publicity 라우트를 추가하고 기본 경로로 /publicity 사용
 app.use('/gallery', galleryRoute);                // gallery 라우트를 추가하고 기본 경로로 /gallery 사용
+
+app.use('/worship', worshipRoute);                // worship 라우트를 추가하고 기본 경로로 /worship 사용
 
 const PORT = 4000;
 const HOST = "localhost";
