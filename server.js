@@ -4,6 +4,7 @@ const axios = require('axios');
 const { getUsers, createUser, updateUser, deleteUser } = require('./model/users');
 const cors = require('cors');
 const path = require("path");
+const usetube = require('usetube');
 
 const app = express();
 
@@ -30,6 +31,61 @@ app.use('/worship', worshipRoute);                // worship 라우트를 추가
 const PORT = 4000;
 const HOST = "localhost";
 
+
+
+
+
+/* 
+async function searchYtInfo() {
+    const data = await usetube.searchChannel('순전한교회ThePureMinistry');
+
+    console.log(data);
+}
+
+searchYtInfo(); 
+*/
+
+/* 
+async function searchYtInfo() {
+    const data = await usetube.searchChannel('순전한교회ThePureMinistry');
+
+    console.log(data);
+}
+*/
+
+/* 
+async function searchYtInfo() {
+    const data = await usetube.getVideoDesc('SOjT9l7hmxg');
+
+    console.log(data);
+}
+
+searchYtInfo(); 
+*/
+
+
+
+/*
+async function searchYtInfo3() {
+    const data = await usetube.getVideosFromDesc('SOjT9l7hmxg');
+
+    console.log(data);
+} 
+*/
+
+/* searchYtInfo3(); */
+
+async function searchYtInfo2() {
+    /* const data = await usetube.getVideoDesc('kIO4DObBXoU'); */
+   /*  const data = await usetube.getPlaylistVideos('PL13DkA-MmUMtDgdl9Gz_lU5iJ5lWPBEM-'); */
+    /* const data = await usetube.getPlaylistVideos('PL13DkA-MmUMucJ-IKlGndvVmnN9wYKl7_'); */
+    /* const data = await usetube.getPlaylistVideos('PL13DkA-MmUMsnKR6z_yJlhPYtHlgWG1uF', 0); */
+    /* const data = await usetube.getPlaylistVideos('PL13DkA-MmUMt1JP_r1sH_lnrZ0JpZl8GF', 0); */
+
+    /* console.log(data); */
+}
+
+/* searchYtInfo2(); */
 
 // GET request
 app.get('/users', async (req, res) => {

@@ -8,7 +8,7 @@ const { getSchools, createSchool, updateSchool, deleteSchool } = require('../mod
 
 router.get('/', async (req, res) => {
     const schools = await getSchools();
-    console.log('schools:', schools);
+    /* console.log('schools:', schools); */
     res.json(schools);
 });
 
@@ -44,7 +44,7 @@ router.post('/createSchool', async (req, res) => {
 /* Update School */
 router.post('/updateSchool', async (req, res) => {
     console.log('여기는 학교정보 수정 라우터입니다.');
-    console.log(req.body);
+    /* console.log(req.body); */
 
     const id = req.body.id;
     const name = req.body.name;

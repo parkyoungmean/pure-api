@@ -6,10 +6,10 @@ const getDatabase = async () => {
     const response = await notion.databases.retrieve({
         database_id: database_id,
     });
-    console.log(response);
+    /* console.log(response); */
 }
 
-const createWorship = async (title, originTitle, verse, speaker, ytUrl, videoId, belong, author, color, pbDate, createdAt, updatedAt) => {
+const createWorship = async (title, originTitle, verse, speaker, desc, ytUrl, videoId, belong, author, color, pbDate, createdAt, updatedAt) => {
     const response = await notion.pages.create({
         parent: { database_id: database_id },
         properties: {
@@ -45,6 +45,15 @@ const createWorship = async (title, originTitle, verse, speaker, ytUrl, videoId,
                 {
                     text: {
                         content: speaker,
+                    },
+                },
+                ],
+            },
+            Desc: {
+                rich_text: [
+                {
+                    text: {
+                        content: desc,
                     },
                 },
                 ],

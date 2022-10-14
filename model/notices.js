@@ -7,7 +7,7 @@ const getDatabase = async () => {
     const response = await notion.databases.retrieve({
         database_id: database_id,
     });
-    console.log(response);
+    /* console.log(response); */
 }
 
 const getNotices = async () => {

@@ -34,7 +34,7 @@ router.post('/createNotice', async (req, res) => {
 /* read - 공지사항 목록을 위한 메서드 */
 router.get('/', async (req, res) => {
     const notices = await getNotices();
-    console.log('notices:', notices);
+    /* console.log('notices:', notices); */
 
     res.json(notices);
 });
@@ -50,7 +50,7 @@ router.get('/getPrimaryNotices', async (req, res) => {
 /* update - 공지사항 수정를 위한 메서드 */
 router.post('/updateNotice', async (req, res) => {
     console.log('여기는 공지사항 수정 라우터입니다.');
-    console.log(req.body);
+    /* console.log(req.body); */
 
     const id = req.body.id;
     const primary = req.body.primary;
