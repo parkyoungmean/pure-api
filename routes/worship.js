@@ -5,7 +5,7 @@ const app = express();
 
 app.use(express.json())
 
-const { createWorship } = require('../model/worships');
+const { getWorships, createWorship } = require('../model/worships');
 
 /* create - 예배 추가를 위한 메서드 */
 router.post('/createWorship', async (req, res) => {
@@ -84,5 +84,13 @@ const processingText = (text) => {
         desc: text,
     }
 }
+
+/* read - 예배 목록을 위한 메서드 */
+router.get('/', async (req, res) => {
+    const worships = await getWorships();
+    /* console.log('worships:', worships); */
+
+    res.json(worships);
+});
 
 module.exports = router;
