@@ -23,7 +23,7 @@ router.post('/createNotice', async (req, res) => {
     try {
         const response = await createNotice(primary, title, img, content, condition, belong, author, createdAt, updatedAt);
 
-        console.log(response);
+        /* console.log(response); */
         console.log('NOTICE CREATE SUCCESS!');
         res.json(response);
     } catch (error) {
@@ -42,7 +42,7 @@ router.get('/', async (req, res) => {
 /* read - 메인(Primary) 공지사항 목록을 위한 메서드 */
 router.get('/getPrimaryNotices', async (req, res) => {
     const primaryNotices = await getPrimaryNotices();
-    console.log('primaryNotices:', primaryNotices);
+    /* console.log('primaryNotices:', primaryNotices); */
 
     res.json(primaryNotices);
 });
@@ -66,7 +66,7 @@ router.post('/updateNotice', async (req, res) => {
     try {
         const response = await updateNotice(id, primary, title, img, content, condition, belong, author, createdAt, updatedAt);
 
-        console.log(response);
+        /* console.log(response); */
         console.log('NOTICE UPDATE SUCCESS !');
         res.json(response);
     } catch (error) {
@@ -81,7 +81,7 @@ router.post('/deleteNotice', async (req, res) => {
     try {
         const response = await deleteNotice(id);
 
-        console.log(response);
+        /* console.log(response); */
         console.log("NOTICE DELETE SUCCESS!");
         res.json(response);
     } catch (error) {

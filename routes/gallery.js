@@ -22,7 +22,7 @@ router.post('/createGallery', async (req, res) => {
     try {
         const response = await createGallery(title, imgs01, imgs02, category, belong, author, createdAt, updatedAt);
 
-        console.log(response);
+        /* console.log(response); */
         console.log('GALLERY CREATE SUCCESS!');
         res.json(response);
     } catch (error) {
@@ -34,7 +34,7 @@ router.post('/createGallery', async (req, res) => {
 /* read - 갤러리 목록을 위한 메서드 */
 router.get('/', async (req, res) => {
     const gallery = await getGallery();
-    console.log('gallery:', gallery);
+    /* console.log('gallery:', gallery); */
 
     res.json(gallery);
 });
@@ -71,7 +71,7 @@ router.post('/deleteGallery', async (req, res) => {
     try {
         const response = await deleteGallery(id);
 
-        console.log(response);
+        /* console.log(response); */
         console.log("GALLERY DELETE SUCCESS!");
         res.json(response);
     } catch (error) {

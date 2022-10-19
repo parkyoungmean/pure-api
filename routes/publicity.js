@@ -81,7 +81,7 @@ router.post('/updatePublicity', async (req, res) => {
     try {
         const response = await updatePublicity(id, img, mobileImg, title, subtitle, content, condition, belong, author, position, size, color, createdAt, updatedAt,);
 
-        console.log(response);
+        /* console.log(response); */
         console.log('UPDATE SUCCESS Publicity!');
         res.json(response);
     } catch (error) {
@@ -96,7 +96,7 @@ router.post('/deletePublicity', async (req, res) => {
     try {
         const response = await deletePublicity(id);
 
-        console.log(response);
+        /* console.log(response); */
         console.log("PUBLICITY DELETE SUCCESS!");
         res.json(response);
     } catch (error) {

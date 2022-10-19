@@ -33,7 +33,7 @@ router.post('/createSchool', async (req, res) => {
     try {
         const response = await createSchool(name, subtitle, img, description, curriculum, registration, graduate, color, createdAt, updatedAt, bookmark);
 
-        console.log(response);
+        /* console.log(response); */
         console.log('CREATE SUCCESS SCHOOL!');
         res.json(response);
     } catch (error) {
@@ -62,7 +62,7 @@ router.post('/updateSchool', async (req, res) => {
     try {
         const response = await updateSchool(id, name, subtitle, img, description, curriculum, registration, graduate, color, createdAt, updatedAt, bookmark);
 
-        console.log(response);
+        /* console.log(response); */
         console.log('UPDATE SUCCESS SCHOOL!');
         res.json(response);
     } catch (error) {
@@ -77,7 +77,7 @@ router.post('/deleteSchool', async (req, res) => {
     try {
         const response = await deleteSchool(id);
 
-        console.log(response);
+        /* console.log(response); */
         console.log("SCHOOL DELETE SUCCESS!");
         res.json(response);
     } catch (error) {

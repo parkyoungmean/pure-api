@@ -65,9 +65,9 @@ async function searchYtInfo01() {
     }
 }
 
-
-/* searchYtInfo01();  */
-
+/* 
+searchYtInfo01(); 
+ */
 
 async function createAllWorship(element) {
 
@@ -86,6 +86,10 @@ async function createAllWorship(element) {
     const updatedAt = '1000-01-01T00:00:00.000';
 
     try {
+
+        console.log('☆☆☆ 이 예배영상의 element.id는?:', element.id);
+        console.log('☆☆☆ 이 예배영상의 videoId는?:', videoId);
+
         /* videoId로 youtube 동영상의 Desc(세부내용)을 얻습니다. */
         const data = await usetube.getVideoDesc(videoId);
         /* youtube 동영상의 desc(세부내용)에서 제목, 성경구절, 강사이름, desc을 추출합니다. */
