@@ -6,7 +6,7 @@ const app = express();
 
 app.use(express.json())
 
-const { getWorships, createWorship } = require('../model/worships');
+const { getWorships, getWorships_ins, createWorship } = require('../model/worships');
 
 /* create - 예배 추가를 위한 메서드 */
 router.post('/createWorship', async (req, res) => {
@@ -397,8 +397,6 @@ const processGospel = (worship) => {
     return worship;
 }
 
-
-
 /* 주일예배 일 경우 - originTitle 사용 */
 const processSunday = (worship) => { 
     
@@ -434,8 +432,6 @@ const processSunday = (worship) => {
 }
 
 
-
-
 /* get - Youtube Description */
 router.post('/getWorshipDesc', async (req, res) => {
     console.log(req.body);
@@ -458,39 +454,58 @@ router.post('/getWorshipDesc', async (req, res) => {
     }
 })
 
-/* Youtbe 예배 영상 descirption을 텍스트 가공하는 메서드 */
-/* const processingText = (text) => {
-    let textArr = text.split(/\r\n|\r|\n/);
-    
-    const title = textArr.filter((elem) => {
-        return (elem.includes('제목:'));
-    });
-    console.log(title.toString());
-    
-    const verse = textArr.filter((elem) => {
-        return (elem.includes('본문:') || elem.includes('메시지:'));
-    });
-    console.log(verse.toString());
-
-    const speaker = textArr.filter((elem) => {
-        return (elem.includes('목사') || elem.includes('전도사'));
-    });
-    console.log(verse.toString());
-
-    return {
-        title: title.toString(),
-        verse: verse.toString(),
-        speaker: speaker.toString().trim(),
-        desc: text,
-    }
-} */
 
 /* read - 예배 목록을 위한 메서드 */
 router.get('/', async (req, res) => {
-    const worships = await getWorships();
-    /* console.log('worships:', worships); */
+    try {
+        const worships = await getWorships();
+        /* console.log('worships:', worships); */
 
-    res.json(worships);
+        res.json(worships);
+    } catch (error) {
+        console.error(error.stack);
+        res.status(500).json(error.stack);
+    }
+    
+});
+
+/* read infinite loading - 예배 목록을 무한 로딩으로 읽기 위한 메서드 */
+router.get('/getWorships-ins', async (req, res) => {
+    console.log('여기는 /getWorships-ins입니다.')
+
+    try {
+        const worships = await getWorships_ins();
+        console.log('worships:', worships);
+
+        res.json(worships);
+    } catch (error) {
+        console.error(error.stack);
+        res.status(500).json(error.stack);
+    }
+});
+
+/* read infinite loading - 예배 목록을 무한 로딩으로 읽기 위한 메서드 */
+router.post('/getWorships-ins', async (req, res) => {
+    console.log('body:', req.body);
+    const { startCursor } = req.body;
+
+    try {
+        if (!startCursor) {
+            
+            const worships = await getWorships_ins();
+
+        } else {
+            const worships = await getWorships_ins(startCursor);
+            
+            /* console.log('worships:', worships); */
+
+            res.json(worships);
+        }
+       
+    } catch (error) {
+        console.error(error.stack);
+        res.status(500).json(error.stack);
+    }
 });
 
 module.exports = router;
