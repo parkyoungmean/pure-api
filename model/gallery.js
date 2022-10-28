@@ -21,8 +21,9 @@ const getGallery = async () => {
                 },
             ],
             filter: {
-                or: [
+                and: [
                     { property: "Status", rich_text: { does_not_contain: "deleted" } },
+                    { property: "Category", rich_text: { contains: "gallery" } },
                 ],
             },
         },

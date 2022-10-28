@@ -38,7 +38,7 @@ router.post('/createWorship', async (req, res) => {
 });
 
 
-/* create - 예배 추가를 위한 메서드 */
+/* create - 신규 예배 추가를 위한 메서드 */
 router.post('/createLatestWorships', (req, res) => {
     console.log('여기는 최근 예배 추가 라우터입니다.');
 
@@ -52,8 +52,6 @@ router.post('/createLatestWorships', (req, res) => {
         console.log(videoId)
 
         let belong='';
-
-        
 
         try {
             /* videoId로 youtube 동영상의 Desc(세부내용)을 얻습니다. */
@@ -114,30 +112,6 @@ router.post('/createLatestWorships', (req, res) => {
             console.error(error);
         }
     });
-    
-    
-    
-   
-    /* 
-    const verse = req.body.verse;
-    const speaker = req.body.speaker;
-    const desc = req.body.desc;
-    const belong = req.body.belong;
-    const author = req.body.author;
-    const color = req.body.color;
-    const createdAt = req.body.createdAt;
-    const updatedAt = req.body.updatedAt;
-    
-    try {
-        const response = await createWorship(title, originTitle, verse, speaker, desc, ytUrl, videoId, belong, author, color, pbDate, createdAt, updatedAt);
-
-        console.log(response);
-        console.log('WORSHIP CREATE SUCCESS!');
-        res.json(response);
-    } catch (error) {
-        console.error(error);
-    } 
-    */
 });
 
 
@@ -469,7 +443,7 @@ router.get('/', async (req, res) => {
     
 });
 
-/* read infinite loading - 예배 목록을 무한 로딩으로 읽기 위한 메서드 */
+/* read infinite loading - 첫번째 예배 목록을 무한 로딩으로 읽기 위한 메서드 */
 router.get('/getWorships-ins', async (req, res) => {
     console.log('여기는 /getWorships-ins입니다.')
 
@@ -484,7 +458,7 @@ router.get('/getWorships-ins', async (req, res) => {
     }
 });
 
-/* read infinite loading - 예배 목록을 무한 로딩으로 읽기 위한 메서드 */
+/* read infinite loading - 예배 목록을 무한 로딩으로 계속 읽기 위한 메서드 */
 router.post('/getWorships-ins', async (req, res) => {
     console.log('body:', req.body);
     const { startCursor } = req.body;
