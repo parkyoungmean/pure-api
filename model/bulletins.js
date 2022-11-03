@@ -217,8 +217,27 @@ const updateBulletin = async (id, title, imgs01, imgs02, category, belong, autho
     return response;
 }
 
+const deleteBulletin = async (id) => {
+    const response = await notion.pages.update({
+        page_id: id,
+        properties: {
+            Status: {
+                rich_text: [
+                    {
+                        text: {
+                            content: "deleted",
+                        },
+                    },
+                ],
+            },
+        },
+    });
+    return response;   
+}
+
 module.exports = {
     createBulletin,
     getBulletins,
     updateBulletin,
+    deleteBulletin,
 }

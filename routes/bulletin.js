@@ -4,7 +4,7 @@ const app = express();
 
 app.use(express.json())
 
-const { getBulletins, createBulletin, updateBulletin } = require('../model/bulletins');
+const { getBulletins, createBulletin, updateBulletin, deleteBulletin } = require('../model/bulletins');
 
 /* create - 주보 추가를 위한 메서드 */
 router.post('/createBulletin', async (req, res) => {
@@ -60,6 +60,21 @@ router.post('/updateBulletin', async (req, res) => {
 
         console.log(response);
         console.log('BULLETIN UPDATE SUCCESS!');
+        res.json(response);
+    } catch (error) {
+        console.error(error);
+    }
+});
+
+/* delete Bulletin - 주보 삭제를 위한 메서드 */
+router.post('/deleteBulletin', async (req, res) => {
+    const id = req.body.id;
+
+    try {
+        const response = await deleteBulletin(id);
+
+        /* console.log(response); */
+        console.log("BULLETIN DELETE SUCCESS!");
         res.json(response);
     } catch (error) {
         console.error(error);
