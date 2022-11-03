@@ -133,8 +133,92 @@ const getBulletins = async () => {
     return bulletins;
 };
 
+const updateBulletin = async (id, title, imgs01, imgs02, category, belong, author, createdAt, updatedAt) => {
+    const response = await notion.pages.update({
+        parent: { database_id: database_id },
+        page_id: id,
+        properties: {
+            Title: {
+                title: [
+                {
+                    text: {
+                        content: title,
+                    },
+                },
+                ],
+            },
+            Img01: {
+                rich_text: [
+                {
+                    text: {
+                        content: imgs01,
+                    },
+                },
+                ],
+            },
+            Img02: {
+                rich_text: [
+                {
+                    text: {
+                        content: imgs02,
+                    },
+                },
+                ],
+            },
+            Category: {
+                rich_text: [
+                {
+                    text: {
+                        content: category,
+                    },
+                },
+                ],
+            },
+            Belong: {
+                rich_text: [
+                {
+                    text: {
+                        content: belong,
+                    },
+                },
+                ],
+            },
+            Author: {
+                rich_text: [
+                {
+                    text: {
+                        content: author,
+                    },
+                },
+                ],
+            },
+            CreatedAt: {
+                date: {
+                    start: createdAt,
+                },
+            },
+            UpdatedAt: {
+                date: {
+                    start: updatedAt,
+                },
+            },
+            Status: {
+                rich_text: [
+                {
+                    text: {
+                    content: "updated",
+                    },
+                },
+                ],
+            },
+        },
+    });
+
+    return response;
+}
 
 module.exports = {
     createBulletin,
     getBulletins,
+    updateBulletin,
 }
