@@ -20,7 +20,7 @@ const worshipRoute = require('./routes/worship');               // worship 라�
 const bulletinRoute = require('./routes/bulletin');             // bulletin 라우트를 추가
 const authRoute = require('./routes/authentication');           // auth 라우트를 추가
 
-app.use(cors());
+app.use(cors({origin: true, credentials: true}));
 
 //MiddleWare
 app.use(express.json());
