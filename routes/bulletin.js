@@ -35,6 +35,7 @@ router.post('/createBulletin', async (req, res) => {
 
 /* read - 주보 목록을 위한 메서드 */
 router.get('/', async (req, res) => {
+    console.log('bulletins:', req.body);
     const bulletins = await getBulletins();
     console.log('bulletins:', bulletins);
 

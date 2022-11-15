@@ -5,21 +5,8 @@ const jwt = require('jsonwebtoken')
 
 app.use(express.json())
 
+const { createMember, findOne } = require('../model/members')
 
-const admins = [
-    {
-        id: 0,
-        name: '관리자',
-        email: 'admin@admin.com',
-        password: 'admin',
-    },
-    { 
-        id: 1,
-        name: 'root',
-        email: 'root@admin.com',
-        password: 'root',
-    }
-]
 
 /* account - 인증을 위한 라우터 */
 router.post('/account', async (req, res) => {
@@ -47,7 +34,6 @@ router.post('/account', async (req, res) => {
     }
 });
 
-
 /* Login - 로그인을 위한 라우터 */
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
@@ -56,11 +42,6 @@ router.post('/login', async (req, res) => {
     const admin = admins.find(admin => admin.email === email && admin.password === password);
 
     if (admin) {
-        const options = {
-            httpOnly: true,
-            sameSite: 'none',
-            secure: true,
-        }
 
         const token = jwt.sign({
             email: admin.email,
@@ -70,8 +51,6 @@ router.post('/login', async (req, res) => {
             issuer: "purechurch",
         });
 
-        /* res.cookie("token", token, options); */
-
         res.json({
             token: token, 
             email: admin.email, 
@@ -80,6 +59,35 @@ router.post('/login', async (req, res) => {
 
     } else {
         res.status(404).json;
+    }
+});
+
+/* Signup - 회원가입을 위한 라우터 */
+router.post('/signup', async (req, res) => {
+    const { email, password, name, phoneNumber, avatar, role, bookmark, createdAt, updatedAt } = req.body;
+
+    try {
+        const member = await findOne(email);
+
+        if (member.length === 0 ) {
+            const response = await createMember(email, password, name, phoneNumber, avatar, role, bookmark, createdAt, updatedAt);
+
+            console.log(response);
+            console.log("MEMBER CREATE SUCCESS!");
+            
+            res.json({
+                signupSuccess: true,
+                message: '회원가입 성공!',
+            })
+        } else {
+            return res.json({
+                signupSuccess: false,
+                message: '이미 가입된 이메일입니다.'
+            })
+        }
+
+    } catch (error) {
+        console.error(error);
     }
 });
 
