@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const app = express();
 const jwt = require('jsonwebtoken')
+const bcrypt = require('bcrypt');
 
 app.use(express.json())
 
@@ -39,25 +40,45 @@ router.post('/login', async (req, res) => {
     const { email, password } = req.body;
     console.log(email, password);
 
-    const admin = admins.find(admin => admin.email === email && admin.password === password);
+    try {
+        const member = await findOne(email);
+        console.log('45번줄 member:', member);
 
-    if (admin) {
+        if (member.length!==0) {                     
+            console.log('48번줄 password:', member[0].Password);                                  // member가 존재할 경우
+            const result = await bcrypt.compare(password, member[0].Password);
+            console.log(result);
 
-        const token = jwt.sign({
-            email: admin.email,
-            name: admin.name,
-        }, "abc1234567", {
-            expiresIn: "15m",
-            issuer: "purechurch",
-        });
+            if (!result) {
+                return res.json({
+                    loginSuccess: false,
+                    message: '비밀번호가 일치하지 않습니다.'
+                })
+            }
 
-        res.json({
-            token: token, 
-            email: admin.email, 
-            name: admin.name
-        });
+            const token = jwt.sign({
+                email: member[0].Email,
+                name: member[0].Name,
+            }, "abc1234567", {
+                expiresIn: "15m",
+                issuer: "purechurch",
+            });
+            console.log('66번줄 token:', token);
+            
+            res.json({
+                loginSuccess: true,
+                message: '로그인 성공!',
+                token: token,
+                data: member[0],
+            })
 
-    } else {
+        } else {                                                            // member가 존재하지 않을 경우
+            return res.json({
+                loginSuccess: false,
+                message: '가입되지 않은 회원입니다.'
+            })
+        }
+    } catch (error) {
         res.status(404).json;
     }
 });
@@ -69,8 +90,10 @@ router.post('/signup', async (req, res) => {
     try {
         const member = await findOne(email);
 
-        if (member.length === 0 ) {
-            const response = await createMember(email, password, name, phoneNumber, avatar, role, bookmark, createdAt, updatedAt);
+        if (member.length === 0) {                                          // member가 빈 배열일 경우
+            
+            const hash = await bcrypt.hash(password, 12);
+            const response = await createMember(email, hash, name, phoneNumber, avatar, role, bookmark, createdAt, updatedAt);
 
             console.log(response);
             console.log("MEMBER CREATE SUCCESS!");

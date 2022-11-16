@@ -9,7 +9,7 @@ const getDatabase = async () => {
   /* console.log(response); */
 };
 
-const createMember = async (email, password, name, phoneNumber, avatar, role, bookmark, createdAt, updatedAt) => {
+const createMember = async (email, hash, name, phoneNumber, avatar, role, bookmark, createdAt, updatedAt) => {
   const response = await notion.pages.create({
     parent: { database_id: database_id },
     properties: {
@@ -26,7 +26,7 @@ const createMember = async (email, password, name, phoneNumber, avatar, role, bo
         rich_text: [
           {
             text: {
-              content: password,
+              content: hash,
             },
           },
         ],
