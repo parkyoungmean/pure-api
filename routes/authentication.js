@@ -37,15 +37,12 @@ router.post('/account', async (req, res) => {
 
 /* Login - 로그인을 위한 라우터 */
 router.post('/login', async (req, res) => {
-    const { email, password } = req.body;
-    console.log(email, password);
+    const { email, password, autoLogin } = req.body;
 
     try {
         const member = await findOne(email);
-        console.log('45번줄 member:', member);
 
-        if (member.length!==0) {                     
-            console.log('48번줄 password:', member[0].Password);                                  // member가 존재할 경우
+        if (member.length!==0) {                                        // member가 존재할 경우
             const result = await bcrypt.compare(password, member[0].Password);
             console.log(result);
 
@@ -56,14 +53,19 @@ router.post('/login', async (req, res) => {
                 })
             }
 
+            let expiresIn = "30m";
+
+            if (autoLogin) {
+                expiresIn = "30d";
+            }
+
             const token = jwt.sign({
                 email: member[0].Email,
                 name: member[0].Name,
             }, "abc1234567", {
-                expiresIn: "15m",
+                expiresIn: expiresIn,
                 issuer: "purechurch",
             });
-            console.log('66번줄 token:', token);
             
             res.json({
                 loginSuccess: true,
