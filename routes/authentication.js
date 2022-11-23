@@ -11,10 +11,8 @@ const { createMember, findOne } = require('../model/members')
 
 /* account - 인증을 위한 라우터 */
 router.post('/account', async (req, res) => {
-    console.log('26번줄 token:', req.body);
-
     if (req.body.token) {
-        jwt.verify(req.body.token, "abc1234567", (err, decoded) => {
+        jwt.verify(req.body.token, process.env.JWT_SECRET, (err, decoded) => {
             if (err) {
                 if (err.name === 'TokenExpiredError') {     // 유효기간 초과
                     return res.status(419).json({
@@ -59,10 +57,15 @@ router.post('/login', async (req, res) => {
                 expiresIn = "30d";
             }
 
+            console.log('autoLogin:', true);
+            console.log('expiresIn:', expiresIn);
+
             const token = jwt.sign({
                 email: member[0].Email,
                 name: member[0].Name,
-            }, "abc1234567", {
+                role: member[0].Role,
+                createdAt: member[0].createdAt,
+            }, process.env.JWT_SECRET, {
                 expiresIn: expiresIn,
                 issuer: "purechurch",
             });
@@ -71,7 +74,7 @@ router.post('/login', async (req, res) => {
                 loginSuccess: true,
                 message: '로그인 성공!',
                 token: token,
-                data: member[0],
+                data: { email: member[0].Email, name: member[0].Name, role: member[0].Role, createdAt: member[0].CreatedAt },
             })
 
         } else {                                                            // member가 존재하지 않을 경우
