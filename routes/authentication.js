@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt');
 
 app.use(express.json())
 
-const { createMember, findOne } = require('../model/members')
+const { createMember, getMembers, findOne } = require('../model/members')
 
 
 /* account - 인증을 위한 라우터 */
@@ -117,6 +117,14 @@ router.post('/signup', async (req, res) => {
     } catch (error) {
         console.error(error);
     }
+});
+
+/* read - 멤버 목록을 위한 메서드 */
+router.get('/', async (req, res) => {
+    const members = await getMembers();
+    console.log('members:', members);
+
+    res.json(members);
 });
 
 module.exports = router;
