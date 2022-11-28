@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt');
 
 app.use(express.json())
 
-const { createMember, getMembers, findOne } = require('../model/members')
+const { createMember, getMembers, getActiveMembers, getBlockedMembers, activeMember, blockMember, findOne } = require('../model/members')
 
 
 /* account - 인증을 위한 라우터 */
@@ -40,7 +40,16 @@ router.post('/login', async (req, res) => {
     try {
         const member = await findOne(email);
 
-        if (member.length!==0) {                                        // member가 존재할 경우
+        if (member.length!==0) {
+
+            if (member[0].Status==='blocked') {
+                return res.json({
+                    loginSuccess: false,
+                    message: '차단된 회원입니다!',
+                })
+            }
+
+            // member가 존재할 경우
             const result = await bcrypt.compare(password, member[0].Password);
             console.log(result);
 
@@ -97,6 +106,12 @@ router.post('/signup', async (req, res) => {
 
         if (member.length === 0) {                                          // member가 빈 배열일 경우
             
+            if (member[0].Status==='blocked') {
+                return res.json({
+                    signupSuccess: false,
+                    message: '차단된 회원입니다!',
+                })
+            }
             const hash = await bcrypt.hash(password, 12);
             const response = await createMember(email, hash, name, phoneNumber, avatar, role, bookmark, createdAt, updatedAt);
 
@@ -119,12 +134,59 @@ router.post('/signup', async (req, res) => {
     }
 });
 
-/* read - 멤버 목록을 위한 메서드 */
+/* read - 회원 목록을 위한 메서드 */
 router.get('/', async (req, res) => {
-    const members = await getMembers();
+    const range = req.body.range;
+    const members = await getMembers(range);
     console.log('members:', members);
 
     res.json(members);
+});
+
+/* read - 활성 회원 목록을 위한 메서드 */
+router.get('/activeMembers', async (req, res) => {
+    const members = await getActiveMembers();
+    console.log('activeMembers:', members);
+
+    res.json(members);
+});
+
+/* read - 차단된 회원 목록을 위한 메서드 */
+router.get('/blockedMembers', async (req, res) => {
+    const members = await getBlockedMembers();
+    console.log('blockMembers:', members);
+
+    res.json(members);
+});
+
+/* active Member - 회원 회복을 위한 메서드 */
+router.post('/activeMember', async (req, res) => {
+    const id = req.body.id;
+
+    try {
+        const response = await activeMember(id);
+
+        /* console.log(response); */
+        console.log("MEMBER ACTIVE SUCCESS!");
+        res.json(response);
+    } catch (error) {
+        console.error(error);
+    }
+});
+
+/* block Member - 회원 차단을 위한 메서드 */
+router.post('/blockMember', async (req, res) => {
+    const id = req.body.id;
+
+    try {
+        const response = await blockMember(id);
+
+        /* console.log(response); */
+        console.log("MEMBER BLOCK SUCCESS!");
+        res.json(response);
+    } catch (error) {
+        console.error(error);
+    }
 });
 
 module.exports = router;

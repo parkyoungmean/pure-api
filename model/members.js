@@ -20,8 +20,77 @@ const getMembers = async () => {
           direction: "descending",
         },
       ],
+    },
+  };
+  const { results } = await notion.request(payload);
+
+  const members = results.map((page) => {
+    return {
+      id: page.id,
+      Email: page.properties.Email.title[0].text.content,
+      Name: page.properties.Name.rich_text[0].text.content,
+      PhoneNumber: page.properties.Phone_Number.rich_text[0].text.content,
+      Avatar: page.properties.Avatar.rich_text[0].text.content,
+      Role: page.properties.Role.rich_text[0].text.content,
+      Bookmark: page.properties.Bookmark.rich_text[0].text.content,
+      CreatedAt: page.properties.CreatedAt.date.start,
+      UpdatedAt: page.properties.UpdatedAt.date.start,
+      Status: page.properties.Status.rich_text[0].text.content,
+    };
+  });
+
+  return members;
+};
+
+const getActiveMembers = async () => {
+  const payload = {
+    path: `databases/${database_id}/query`,
+    method: `POST`,
+    body: {
+      sorts: [
+        {
+          property: "CreatedAt",
+          direction: "descending",
+        },
+      ],
       filter: {
-        or: [{ property: "Status", rich_text: { does_not_contain: "deleted" }}],
+        or: [{ property: "Status", rich_text: { does_not_contain: "blocked" }}],
+      },
+    },
+  };
+  const { results } = await notion.request(payload);
+
+  const members = results.map((page) => {
+    return {
+      id: page.id,
+      Email: page.properties.Email.title[0].text.content,
+      Name: page.properties.Name.rich_text[0].text.content,
+      PhoneNumber: page.properties.Phone_Number.rich_text[0].text.content,
+      Avatar: page.properties.Avatar.rich_text[0].text.content,
+      Role: page.properties.Role.rich_text[0].text.content,
+      Bookmark: page.properties.Bookmark.rich_text[0].text.content,
+      CreatedAt: page.properties.CreatedAt.date.start,
+      UpdatedAt: page.properties.UpdatedAt.date.start,
+      Status: page.properties.Status.rich_text[0].text.content,
+    };
+  });
+
+  return members;
+};
+
+const getBlockedMembers = async () => {
+  const payload = {
+    path: `databases/${database_id}/query`,
+    method: `POST`,
+    body: {
+      sorts: [
+        {
+          property: "CreatedAt",
+          direction: "descending",
+        },
+      ],
+      filter: {
+        or: [{ property: "Status", rich_text: { contains: "blocked" }}],
       },
     },
   };
@@ -137,7 +206,48 @@ const createMember = async (email, hash, name, phoneNumber, avatar, role, bookma
   
   return response;
 };
-  
+
+
+/* 회원회복 */
+const activeMember = async (id) => {
+  const response = await notion.pages.update({
+    page_id: id,
+    properties: {
+      Status: {
+        rich_text: [
+          {
+            text: {
+              content: "created",
+            },
+          },
+        ],
+      },
+    },
+  });
+
+  return response;
+};
+
+/* 회원차단 */
+const blockMember = async (id) => {
+  const response = await notion.pages.update({
+    page_id: id,
+    properties: {
+      Status: {
+        rich_text: [
+          {
+            text: {
+              content: "blocked",
+            },
+          },
+        ],
+      },
+    },
+  });
+
+  return response;
+};
+
 const findOne = async (email) => {
   
   const payload = {
@@ -183,6 +293,10 @@ const findOne = async (email) => {
 
   module.exports = {
     getMembers,
+    getActiveMembers,
+    getBlockedMembers,
     createMember,
+    activeMember,
+    blockMember,
     findOne,
   };
