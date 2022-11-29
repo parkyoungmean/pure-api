@@ -42,6 +42,38 @@ const getMembers = async () => {
   return members;
 };
 
+/* 무한 로딩(Infinite Loading) */
+const getMembers_inl = async (startCursor) => {
+  const payload = await notion.databases.query({
+    database_id: database_id,
+    sorts: [
+      {
+        property: "CreatedAt",
+        direction: "descending",
+      },
+    ],
+    start_cursor: startCursor,
+    page_size: 20,
+  })
+
+  const members = payload.results.map((page) => {
+    return {
+      id: page.id,
+      Email: page.properties.Email.title[0].text.content,
+      Name: page.properties.Name.rich_text[0].text.content,
+      PhoneNumber: page.properties.Phone_Number.rich_text[0].text.content,
+      Avatar: page.properties.Avatar.rich_text[0].text.content,
+      Role: page.properties.Role.rich_text[0].text.content,
+      Bookmark: page.properties.Bookmark.rich_text[0].text.content,
+      CreatedAt: page.properties.CreatedAt.date.start,
+      UpdatedAt: page.properties.UpdatedAt.date.start,
+      Status: page.properties.Status.rich_text[0].text.content,
+    };
+  });
+
+  return [payload.next_cursor, payload.has_more, members];
+};
+
 const getActiveMembers = async () => {
   const payload = {
     path: `databases/${database_id}/query`,
@@ -76,6 +108,41 @@ const getActiveMembers = async () => {
   });
 
   return members;
+};
+
+/* 무한 로딩(Infinite Loading) */
+const getActiveMembers_inl = async (startCursor) => {
+  const payload = await notion.databases.query({
+    database_id: database_id,
+    sorts: [
+      {
+        property: "CreatedAt",
+        direction: "descending",
+      },
+    ],
+    filter: {
+      or: [{ property: "Status", rich_text: { does_not_contain: "blocked" }}],
+    },
+    start_cursor: startCursor,
+    page_size: 20,
+  })
+
+  const members = payload.results.map((page) => {
+    return {
+      id: page.id,
+      Email: page.properties.Email.title[0].text.content,
+      Name: page.properties.Name.rich_text[0].text.content,
+      PhoneNumber: page.properties.Phone_Number.rich_text[0].text.content,
+      Avatar: page.properties.Avatar.rich_text[0].text.content,
+      Role: page.properties.Role.rich_text[0].text.content,
+      Bookmark: page.properties.Bookmark.rich_text[0].text.content,
+      CreatedAt: page.properties.CreatedAt.date.start,
+      UpdatedAt: page.properties.UpdatedAt.date.start,
+      Status: page.properties.Status.rich_text[0].text.content,
+    };
+  });
+
+  return [payload.next_cursor, payload.has_more, members];
 };
 
 const getBlockedMembers = async () => {
@@ -113,7 +180,6 @@ const getBlockedMembers = async () => {
 
   return members;
 };
-
 
 const createMember = async (email, hash, name, phoneNumber, avatar, role, bookmark, createdAt, updatedAt) => {
   const response = await notion.pages.create({
@@ -207,7 +273,6 @@ const createMember = async (email, hash, name, phoneNumber, avatar, role, bookma
   return response;
 };
 
-
 /* 회원회복 */
 const activeMember = async (id) => {
   const response = await notion.pages.update({
@@ -293,7 +358,9 @@ const findOne = async (email) => {
 
   module.exports = {
     getMembers,
+    getMembers_inl,
     getActiveMembers,
+    getActiveMembers_inl,
     getBlockedMembers,
     createMember,
     activeMember,

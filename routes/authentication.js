@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt');
 
 app.use(express.json())
 
-const { createMember, getMembers, getActiveMembers, getBlockedMembers, activeMember, blockMember, findOne } = require('../model/members')
+const { createMember, getMembers, getMembers_inl, getActiveMembers, getActiveMembers_inl, getBlockedMembers, activeMember, blockMember, findOne } = require('../model/members')
 
 
 /* account - 인증을 위한 라우터 */
@@ -136,11 +136,44 @@ router.post('/signup', async (req, res) => {
 
 /* read - 회원 목록을 위한 메서드 */
 router.get('/', async (req, res) => {
-    const range = req.body.range;
-    const members = await getMembers(range);
+    const members = await getMembers();
     console.log('members:', members);
 
     res.json(members);
+});
+
+/* read infinite loading - 첫번째 회원 목록을 위한 메서드 */
+router.get('/getMembers-inl', async (req, res) => {
+    try {
+        const members = await getMembers_inl();
+        console.log('members:', members);
+
+        res.json(members);
+    } catch (error) {
+        console.error(error.stack);
+        res.status(500).json(error.stack);
+    }
+});
+
+/* read infinite loading - 회원 목록을 무한 로딩으로 계속 읽기 위한 메서드 */
+router.post('/getMembers-inl', async (req, res) => {
+
+    const { startCursor } = req.body;
+
+    try {
+        if (!startCursor) {
+            const members = await getMembers_inl();
+            console.log('members:', members);
+        } else {
+            const members = await getMembers_inl(startCursor);
+            console.log('members:', members);
+            res.json(members);
+        }
+    } catch (error) {
+        console.error(error.stack);
+        res.status(500).json(error.stack);
+    }
+    
 });
 
 /* read - 활성 회원 목록을 위한 메서드 */
@@ -149,6 +182,39 @@ router.get('/activeMembers', async (req, res) => {
     console.log('activeMembers:', members);
 
     res.json(members);
+});
+
+/* read - 첫번째 활성 회원 목록을 위한 메서드 */
+router.get('/activeMembers-inl', async (req, res) => {
+    try {
+        const members = await getActiveMembers_inl();
+        console.log('activeMembers:', members);
+        res.json(members);
+    } catch (error) {
+        console.error(error.stack);
+        res.status(500).json(error.stack);
+    }
+});
+
+/* read infinite loading - 활성 회원 목록을 무한 로딩으로 계속 읽기 위한 메서드 */
+router.post('/activeMembers-inl', async (req, res) => {
+
+    const { startCursor } = req.body;
+
+    try {
+        if (!startCursor) {
+            const members = await getActiveMembers_inl();
+            console.log('members:', members);
+        } else {
+            const members = await getActiveMembers_inl(startCursor);
+            console.log('members:', members);
+            res.json(members);
+        }
+    } catch (error) {
+        console.error(error.stack);
+        res.status(500).json(error.stack);
+    }
+    
 });
 
 /* read - 차단된 회원 목록을 위한 메서드 */
