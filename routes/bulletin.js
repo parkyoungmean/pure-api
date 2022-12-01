@@ -4,7 +4,7 @@ const app = express();
 
 app.use(express.json())
 
-const { getBulletins, createBulletin, updateBulletin, deleteBulletin } = require('../model/bulletins');
+const { getBulletins, getBulletins_inl, createBulletin, updateBulletin, deleteBulletin } = require('../model/bulletins');
 
 /* create - 주보 추가를 위한 메서드 */
 router.post('/createBulletin', async (req, res) => {
@@ -40,6 +40,40 @@ router.get('/', async (req, res) => {
     console.log('bulletins:', bulletins);
 
     res.json(bulletins);
+});
+
+/* read infinite loading - 첫번째 주보 목록을 위한 메서드 */
+router.get('/getBulletins-inl', async (req, res) => {
+    try {
+        const bulletins = await getBulletins_inl();
+        console.log('bulletins:', bulletins);
+
+        res.json(bulletins);
+    } catch (error) {
+        console.error(error.stack);
+        res.status(500).json(error.stack);
+    }
+});
+
+/* read infinite loading - 주보 목록을 무한 로딩으로 계속 읽기 위한 메서드 */
+router.post('/getBulletins-inl', async (req, res) => {
+
+    const { startCursor } = req.body;
+
+    try {
+        if (!startCursor) {
+            const bulletins = await getBulletins_inl();
+            console.log('bulletins:', bulletins);
+        } else {
+            const bulletins = await getBulletins_inl(startCursor);
+            console.log('bulletins:', bulletins);
+            res.json(bulletins);
+        }
+    } catch (error) {
+        console.error(error.stack);
+        res.status(500).json(error.stack);
+    }
+    
 });
 
 /* update - 주보 수정을 위한 메서드 */

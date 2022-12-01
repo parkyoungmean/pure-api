@@ -49,6 +49,44 @@ const getNotices = async () => {
     return notices;
 };
 
+/* 무한 로딩(Infinite Loading) */
+const getNotices_inl = async (startCursor) => {
+    const payload = await notion.databases.query({
+      database_id: database_id,
+      sorts: [
+        {
+          property: "CreatedAt",
+          direction: "descending",
+        },
+      ],
+      filter: {
+        or: [
+            { property: "Status", rich_text: { does_not_contain: "deleted" } },
+        ],
+      },
+      start_cursor: startCursor,
+      page_size: 10,
+    })
+  
+    const notices = payload.results.map((page) => {
+        return {
+            id: page.id,
+            Title: page.properties.Title.title[0].text.content,
+            Primary: page.properties.Primary.checkbox,
+            Content: page.properties.Content.rich_text[0].text.content,
+            Image: page.properties.Image.rich_text[0].text.content,
+            Condition: page.properties.Condition.rich_text[0].text.content,
+            Belong: page.properties.Belong.rich_text[0].text.content,
+            Author: page.properties.Author.rich_text[0].text.content,
+            CreatedAt: page.properties.CreatedAt.date.start,
+            UpdatedAt: page.properties.UpdatedAt.date.start,
+            Status: page.properties.Status.rich_text[0].text.content,
+        };
+    });
+
+    return [payload.next_cursor, payload.has_more, notices];
+};
+
 /* 메인(Primary) 공지사항 글들을 얻기 */
 const getPrimaryNotices = async () => {
     const payload = {
@@ -284,6 +322,7 @@ const deleteNotice = async (id) => {
 module.exports = {
     createNotice,
     getNotices,
+    getNotices_inl,
     getPrimaryNotices,
     updateNotice,
     deleteNotice,

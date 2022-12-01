@@ -4,7 +4,7 @@ const app = express();
 
 app.use(express.json())
 
-const { getGallery, createGallery, updateGallery, deleteGallery } = require('../model/gallery');
+const { getGallery, getGallery_inl, createGallery, updateGallery, deleteGallery } = require('../model/gallery');
 
 /* create - 갤러리 추가를 위한 메서드 */
 router.post('/createGallery', async (req, res) => {
@@ -37,6 +37,39 @@ router.get('/', async (req, res) => {
     /* console.log('gallery:', gallery); */
 
     res.json(gallery);
+});
+
+/* read infinite loading - 첫번째 주보 목록을 위한 메서드 */
+router.get('/getGallery-inl', async (req, res) => {
+    try {
+        const gallery = await getGallery_inl();
+        console.log('gallery:', gallery);
+
+        res.json(gallery);
+    } catch (error) {
+        console.error(error.stack);
+        res.status(500).json(error.stack);
+    }
+});
+
+/* read infinite loading - 주보 목록을 무한 로딩으로 계속 읽기 위한 메서드 */
+router.post('/getGallery-inl', async (req, res) => {
+
+    const { startCursor } = req.body;
+
+    try {
+        if (!startCursor) {
+            const gallery = await getGallery_inl();
+            console.log('gallery:', gallery);
+        } else {
+            const gallery = await getGallery_inl(startCursor);
+            console.log('gallery:', gallery);
+            res.json(gallery);
+        }
+    } catch (error) {
+        console.error(error.stack);
+        res.status(500).json(error.stack);
+    } 
 });
 
 /* update - 갤러리 수정을 위한 메서드 */

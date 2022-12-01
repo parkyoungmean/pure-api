@@ -48,6 +48,44 @@ const getGallery = async () => {
     return gallery;
 };
 
+/* 무한 로딩(Infinite Loading) */
+const getGallery_inl = async (startCursor) => {
+    const payload = await notion.databases.query({
+      database_id: database_id,
+      sorts: [
+        {
+          property: "CreatedAt",
+          direction: "descending",
+        },
+      ],
+      filter: {
+        and: [
+            { property: "Status", rich_text: { does_not_contain: "deleted" } },
+            { property: "Category", rich_text: { contains: "gallery" } },
+        ],
+      },
+      start_cursor: startCursor,
+      page_size: 16,
+    })
+  
+    const gallery = payload.results.map((page) => {
+        return {
+            id: page.id,
+            Title: page.properties.Title.title[0].text.content,
+            Img01: page.properties.Img01.rich_text[0].text.content,
+            Img02: page.properties.Img02.rich_text[0].text.content,
+            Category: page.properties.Category.rich_text[0].text.content,
+            Belong: page.properties.Belong.rich_text[0].text.content,
+            Author: page.properties.Author.rich_text[0].text.content,
+            CreatedAt: page.properties.CreatedAt.date.start,
+            UpdatedAt: page.properties.UpdatedAt.date.start,
+            Status: page.properties.Status.rich_text[0].text.content,
+        };
+    });
+  
+    return [payload.next_cursor, payload.has_more, gallery];
+};
+
 const createGallery = async (title, imgs01, imgs02, category, belong, author, createdAt, updatedAt) => {
     const response = await notion.pages.create({
         parent: { database_id: database_id },
@@ -236,6 +274,7 @@ const deleteGallery = async (id) => {
 module.exports = {
     createGallery,
     getGallery,
+    getGallery_inl,
     updateGallery,
     deleteGallery,
 }

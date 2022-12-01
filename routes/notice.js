@@ -4,7 +4,7 @@ const app = express();
 
 app.use(express.json())
 
-const { getNotices, getPrimaryNotices, createNotice, updateNotice, deleteNotice } = require('../model/notices');
+const { getNotices, getNotices_inl, getPrimaryNotices, createNotice, updateNotice, deleteNotice } = require('../model/notices');
 
 /* create - 공지사항 추가를 위한 메서드 */
 router.post('/createNotice', async (req, res) => {
@@ -37,6 +37,39 @@ router.get('/', async (req, res) => {
     /* console.log('notices:', notices); */
 
     res.json(notices);
+});
+
+/* read infinite loading - 첫번째 공지사항 목록을 위한 메서드 */
+router.get('/getNotices-inl', async (req, res) => {
+    try {
+        const notices = await getNotices_inl();
+        console.log('notices:', notices);
+
+        res.json(notices);
+    } catch (error) {
+        console.error(error.stack);
+        res.status(500).json(error.stack);
+    }
+});
+
+/* read infinite loading - 공지사항 목록을 무한 로딩으로 계속 읽기 위한 메서드 */
+router.post('/getNotices-inl', async (req, res) => {
+
+    const { startCursor } = req.body;
+
+    try {
+        if (!startCursor) {
+            const notices = await getNotices_inl();
+            console.log('notices:', notices);
+        } else {
+            const notices = await getNotices_inl(startCursor);
+            console.log('inifinite notices:', notices);
+            res.json(notices);
+        }
+    } catch (error) {
+        console.error(error.stack);
+        res.status(500).json(error.stack);
+    } 
 });
 
 /* read - 메인(Primary) 공지사항 목록을 위한 메서드 */
