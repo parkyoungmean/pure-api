@@ -23,15 +23,10 @@ router.post('/createPublicity', async (req, res) => {
     const img = req.body.img;
     const mobileImg = req.body.mobileImg;
     
-    const title = req.body.title;
-    const subtitle = req.body.subtitle;
-    const content = req.body.description;
+    const texts = JSON.stringify(req.body.texts);
     const condition = req.body.condition;                    // 광고 or 공지
     const belong = "전체";                                    // 전체 or ~학교
     const author = "관리자";
-    const position = JSON.stringify(req.body.position);      // 전체 글의 x, y의 위치
-    const size = JSON.stringify(req.body.size);              // 전체 글의 글자 크기
-    const color = JSON.stringify(req.body.color);            // 전체 글의 글자색
     const createdAt = req.body.createdAt;
     const updatedAt = req.body.updatedAt;
 
@@ -42,7 +37,7 @@ router.post('/createPublicity', async (req, res) => {
 
        /*  uploadFile(JSON.parse(img)); */
 
-        const response = await createPublicity(img, mobileImg, title, subtitle, content, condition, belong, author, position, size, color, createdAt, updatedAt);
+        const response = await createPublicity(img, mobileImg, texts, condition, belong, author, createdAt, updatedAt);
 
         console.log('결과:', response);
         console.log('CREATE SUCCESS PUBLICITY!');

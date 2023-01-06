@@ -34,17 +34,12 @@ const getPublicitys = async () => {
   const publicitys = results.map((page) => {
     return {
       id: page.id,
-      Title: page.properties.Title.title[0].text.content,
-      Subtitle: page.properties.Subtitle.rich_text[0].text.content,
-      Content: page.properties.Content.rich_text[0].text.content,
+      Texts: page.properties.Texts.title[0].text.content,
       Img: page.properties.Img.rich_text[0].text.content,
       MobileImg: page.properties.MobileImg.rich_text[0].text.content,
       Condition: page.properties.Condition.rich_text[0].text.content,
       Belong: page.properties.Belong.rich_text[0].text.content,
       Author: page.properties.Author.rich_text[0].text.content,
-      Position: page.properties.Position.rich_text[0].text.content,
-      Size: page.properties.Size.rich_text[0].text.content,
-      Color: page.properties.Color.rich_text[0].text.content,
       CreatedAt: page.properties.CreatedAt.date.start,
       UpdatedAt: page.properties.UpdatedAt.date.start,
       Status: page.properties.Status.rich_text[0].text.content,
@@ -57,26 +52,21 @@ const getPublicitys = async () => {
 const createPublicity = async (
   img,
   mobileImg,
-  title,
-  subtitle,
-  content,
+  texts,
   condition,
   belong,
   author,
-  position,
-  size,
-  color,
   createdAt,
   updatedAt
 ) => {
   const response = await notion.pages.create({
     parent: { database_id: database_id },
     properties: {
-      Title: {
+      Texts: {
         title: [
           {
             text: {
-              content: title,
+              content: texts,
             },
           },
         ],
@@ -95,24 +85,6 @@ const createPublicity = async (
           {
             text: {
               content: mobileImg,
-            },
-          },
-        ],
-      },
-      Subtitle: {
-        rich_text: [
-          {
-            text: {
-              content: subtitle,
-            },
-          },
-        ],
-      },
-      Content: {
-        rich_text: [
-          {
-            text: {
-              content: content,
             },
           },
         ],
@@ -140,33 +112,6 @@ const createPublicity = async (
           {
             text: {
               content: author,
-            },
-          },
-        ],
-      },
-      Position: {
-        rich_text: [
-          {
-            text: {
-              content: position,
-            },
-          },
-        ],
-      },
-      Size: {
-        rich_text: [
-          {
-            text: {
-              content: size,
-            },
-          },
-        ],
-      },
-      Color: {
-        rich_text: [
-          {
-            text: {
-              content: color,
             },
           },
         ],
