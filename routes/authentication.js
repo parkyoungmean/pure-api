@@ -104,9 +104,10 @@ router.post('/signup', async (req, res) => {
     try {
         const member = await findOne(email);
 
-        console.log(member);
+        console.log('회원의 정보:', member);
+        console.log('회원정보의 길이:', member.length);
         
-        if (member.length === 0) {                                          // member가 빈 배열일 경우
+        if (member.length === 0) {                                          // member가 빈 배열일 경우 - 회원가입이 안되어있을 경우
         
             const hash = await bcrypt.hash(password, 12);
             const response = await createMember(email, hash, name, phoneNumber, avatar, role, bookmark, createdAt, updatedAt);
