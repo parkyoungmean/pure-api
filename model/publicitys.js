@@ -145,15 +145,10 @@ const updatePublicity = async (
   id,
   img,
   mobileImg,
-  title,
-  subtitle,
-  content,
+  texts,
   condition,
   belong,
   author,
-  position,
-  size,
-  color,
   createdAt,
   updatedAt
 ) => {
@@ -161,11 +156,11 @@ const updatePublicity = async (
     parent: { database_id: database_id },
     page_id: id,
     properties: {
-      Title: {
+      Texts: {
         title: [
           {
             text: {
-              content: title,
+              content: texts,
             },
           },
         ],
@@ -184,24 +179,6 @@ const updatePublicity = async (
           {
             text: {
               content: mobileImg,
-            },
-          },
-        ],
-      },
-      Subtitle: {
-        rich_text: [
-          {
-            text: {
-              content: subtitle,
-            },
-          },
-        ],
-      },
-      Content: {
-        rich_text: [
-          {
-            text: {
-              content: content,
             },
           },
         ],
@@ -229,33 +206,6 @@ const updatePublicity = async (
           {
             text: {
               content: author,
-            },
-          },
-        ],
-      },
-      Position: {
-        rich_text: [
-          {
-            text: {
-              content: position,
-            },
-          },
-        ],
-      },
-      Size: {
-        rich_text: [
-          {
-            text: {
-              content: size,
-            },
-          },
-        ],
-      },
-      Color: {
-        rich_text: [
-          {
-            text: {
-              content: color,
             },
           },
         ],

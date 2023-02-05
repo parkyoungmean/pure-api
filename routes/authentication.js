@@ -99,19 +99,15 @@ router.post('/login', async (req, res) => {
 
 /* Signup - 회원가입을 위한 라우터 */
 router.post('/signup', async (req, res) => {
-    const { email, password, name, phoneNumber, avatar, role, bookmark, createdAt, updatedAt } = req.body;
+    const { email, password, name, phoneNumber, avatar, role, bookmark, createdAt, updatedAt, Status } = req.body;
 
     try {
         const member = await findOne(email);
 
+        console.log(member);
+        
         if (member.length === 0) {                                          // member가 빈 배열일 경우
-            
-            if (member[0].Status==='blocked') {
-                return res.json({
-                    signupSuccess: false,
-                    message: '차단된 회원입니다!',
-                })
-            }
+        
             const hash = await bcrypt.hash(password, 12);
             const response = await createMember(email, hash, name, phoneNumber, avatar, role, bookmark, createdAt, updatedAt);
 
@@ -123,10 +119,17 @@ router.post('/signup', async (req, res) => {
                 message: '회원가입 성공!',
             })
         } else {
-            return res.json({
-                signupSuccess: false,
-                message: '이미 가입된 이메일입니다.'
-            })
+            if (member[0].Status==='blocked') {
+                return res.json({
+                    signupSuccess: false,
+                    message: '차단된 회원입니다!',
+                })
+            } else {
+                return res.json({
+                    signupSuccess: false,
+                    message: '이미 가입된 이메일입니다.'
+                })
+            }
         }
 
     } catch (error) {

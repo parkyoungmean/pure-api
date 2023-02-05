@@ -58,15 +58,10 @@ router.post('/updatePublicity', async (req, res) => {
     const img = req.body.img;
     const mobileImg = req.body.mobileImg;
     
-    const title = req.body.title;
-    const subtitle = req.body.subtitle;
-    const content = req.body.description;
-    const condition = req.body.condition;                    // 광고 or 공지
+    const texts = JSON.stringify(req.body.texts);
+    const condition = req.body.condition;                              // 광고 or 공지
     const belong = req.body.belong;                                    // 전체 or ~학교
     const author = req.body.author;
-    const position = JSON.stringify(req.body.position);      // 전체 글의 x, y의 위치
-    const size = JSON.stringify(req.body.size);              // 전체 글의 글자 크기
-    const color = JSON.stringify(req.body.color);            // 전체 글의 글자색
     const createdAt = req.body.createdAt;
     const updatedAt = req.body.updatedAt;
 
@@ -74,7 +69,7 @@ router.post('/updatePublicity', async (req, res) => {
     console.log('mobileImg 파일 내용:', mobileImg);
     
     try {
-        const response = await updatePublicity(id, img, mobileImg, title, subtitle, content, condition, belong, author, position, size, color, createdAt, updatedAt,);
+        const response = await updatePublicity(id, img, mobileImg, texts, condition, belong, author, createdAt, updatedAt,);
 
         /* console.log(response); */
         console.log('UPDATE SUCCESS Publicity!');
