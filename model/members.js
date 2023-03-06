@@ -52,6 +52,11 @@ const getMembers_inl = async (startCursor) => {
         direction: "descending",
       },
     ],
+    filter: {
+      and: [
+          { property: "Status", rich_text: { does_not_contain: "deleted" } },
+      ],
+    },
     start_cursor: startCursor,
     page_size: 20,
   })
@@ -86,7 +91,10 @@ const getActiveMembers = async () => {
         },
       ],
       filter: {
-        or: [{ property: "Status", rich_text: { does_not_contain: "blocked" }}],
+        and: [
+          { property: "Status", rich_text: { does_not_contain: "blocked" } },
+          { property: "Status", rich_text: { does_not_contain: "deleted" } },
+        ],
       },
     },
   };

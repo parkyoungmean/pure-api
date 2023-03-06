@@ -56,57 +56,115 @@ router.post('/createLatestWorships', (req, res) => {
         try {
             /* videoId로 youtube 동영상의 Desc(세부내용)을 얻습니다. */
             const data = await usetube.getVideoDesc(videoId);
-            /* youtube 동영상의 desc(세부내용)에서 제목, 성경구절, 강사이름, desc을 추출합니다. */
-            let response = processingText(data[0].text);
-            
-            originTitle.includes('주일') ? belong='주일예배' : originTitle.includes('주일예배') ? belong='주일예배' : response.desc.includes('주일설교') ? belong='주일예배' : originTitle.includes('Sunday') ? belong='주일예배' :  originTitle.includes('English') ? belong='주일예배' : originTitle.includes('연합예배') ? belong='주일예배' : originTitle.includes('목요예배') ? belong='목요예배' : originTitle.includes('목요특별') ? belong='목요예배' : originTitle.includes('어린이예배') ? belong='어린이예배' : originTitle.includes('프랜드') ? belong='어린이예배': originTitle.includes('청소년주일예배') ? belong='청소년예배' : originTitle.includes('청소년부 예배') ? belong='청소년예배' : originTitle.includes('청소년부예배') ? belong='청소년예배' : originTitle.includes('청소년 예배') ? belong='청소년예배' :originTitle.includes('청년부') ? belong='청년부예배' :  originTitle.includes('청년부예배') ? belong='청년부예배' : originTitle.includes('송구영신') ? belong='송구영신예배' : originTitle.includes('성탄예배') ? belong='성탄예배' : originTitle.includes('러브레터') ? belong='특별행사' : originTitle.includes('부활절') ? belong='주일예배' : originTitle.includes('큐티묵상') ? belong='큐티묵상' : originTitle.includes('큐티 묵상') ? belong='큐티묵상' : originTitle.includes('찬양묵상') ? belong='찬양묵상' : response.desc.includes('간증') ? belong='간증' : originTitle.includes('복음학교') ? belong='복음학교' : originTitle.includes('Gospel') ? belong='복음학교' : originTitle.includes('치유학교') ? belong='치유학교' : belong=''; 
-            
-            console.log(belong);
+            console.log('getVideoDesc결과:', data);
 
-            let worship = {
-                originTitle: originTitle,
-                title: response.title,
-                verse: response.verse,
-                speaker: response.speaker,
-                desc: response.desc,
-                ytUrl: ytUrl,
-                videoId: videoId,
-                belong: belong,
-                author: '관리자',
-                color: selectColorToBelong(belong),
-                pbDate: pbDate,
-                createdAt: pbDate,
-                updatedAt: '1000-01-01T00:00:00.000',
-            }
-            if (worship.desc==='설명') {
+
+            if (typeof data === "undefined") {
+                console.log(`${originTitle}의 desc 값이 undefined입니다.`);
+                originTitle.includes('주일') ? belong='주일예배' : originTitle.includes('주일예배') ? belong='주일예배' : originTitle.includes('Sunday') ? belong='주일예배' :  originTitle.includes('English') ? belong='주일예배' : originTitle.includes('연합예배') ? belong='주일예배' : originTitle.includes('목요예배') ? belong='목요예배' : originTitle.includes('목요특별') ? belong='목요예배' : originTitle.includes('어린이예배') ? belong='어린이예배' : originTitle.includes('프랜드') ? belong='어린이예배': originTitle.includes('청소년주일예배') ? belong='청소년예배' : originTitle.includes('청소년부 예배') ? belong='청소년예배' : originTitle.includes('청소년부예배') ? belong='청소년예배' : originTitle.includes('청소년 예배') ? belong='청소년예배' :originTitle.includes('청년부') ? belong='청년부예배' :  originTitle.includes('청년부예배') ? belong='청년부예배' : originTitle.includes('송구영신') ? belong='송구영신예배' : originTitle.includes('성탄예배') ? belong='성탄예배' : originTitle.includes('러브레터') ? belong='특별행사' : originTitle.includes('부활절') ? belong='주일예배' : originTitle.includes('큐티묵상') ? belong='큐티묵상' : originTitle.includes('큐티 묵상') ? belong='큐티묵상' : originTitle.includes('찬양묵상') ? belong='찬양묵상' : originTitle.includes('복음학교') ? belong='복음학교' : originTitle.includes('Gospel') ? belong='복음학교' : originTitle.includes('치유학교') ? belong='치유학교' : belong=''; 
                 
+                console.log(belong);
+
+                let worship = {
+                    originTitle: originTitle,
+                    title: originTitle,
+                    verse: '',
+                    speaker: '',
+                    desc: '',
+                    ytUrl: ytUrl,
+                    videoId: videoId,
+                    belong: belong,
+                    author: '관리자',
+                    color: selectColorToBelong(belong),
+                    pbDate: pbDate,
+                    createdAt: pbDate,
+                    updatedAt: '1000-01-01T00:00:00.000',
+                }
+
+                if (worship.desc==='설명') {
+                    
+                } else {
+                    if (worship.desc.includes('간증')) {
+                        worship = processTestimony(worship);
+                    } 
+                    else if(worship.belong.includes('목요예배') && !worship.belong.includes('어린이예배')) {
+                        worship = processThursday(worship);
+                    } 
+                    else if(worship.belong.includes('주일예배')) {
+                        worship = processSunday(worship);
+                    }
+                    else if(worship.belong.includes('어린이예배')) {
+                        worship = processChildren(worship);
+                    } 
+                    else if(worship.belong.includes('큐티묵상')) {
+                        worship = processQt(worship);
+                    }
+                    else if(worship.belong.includes('찬양묵상')) {
+                        worship = processGospel(worship);
+                    }
+                }
+
+                console.log(worship);
+                const  resData= await createWorship(worship.title, worship.originTitle, worship.verse, worship.speaker, worship.desc, worship.ytUrl, worship.videoId, worship.belong, worship.author, worship.color, dayjs(worship.pbDate).add(9, "hour"), dayjs(worship.createdAt).add(9, "hour"), worship.updatedAt);
+
+                console.log('res결과:', resData);
+                console.log('LATEST WORSHIP CREATE SUCCESS!');
+                res.json(resData);
+
             } else {
-                if (worship.desc.includes('간증')) {
-                    worship = processTestimony(worship);
-                } 
-                else if(worship.belong.includes('목요예배') && !worship.belong.includes('어린이예배')) {
-                    worship = processThursday(worship);
-                } 
-                else if(worship.belong.includes('주일예배')) {
-                    worship = processSunday(worship);
+            
+                /* youtube 동영상의 desc(세부내용)에서 제목, 성경구절, 강사이름, desc을 추출합니다. */
+                let response = processingText(data[0].text);
+                
+                originTitle.includes('주일') ? belong='주일예배' : originTitle.includes('주일예배') ? belong='주일예배' : response.desc.includes('주일설교') ? belong='주일예배' : originTitle.includes('Sunday') ? belong='주일예배' :  originTitle.includes('English') ? belong='주일예배' : originTitle.includes('연합예배') ? belong='주일예배' : originTitle.includes('목요예배') ? belong='목요예배' : originTitle.includes('목요특별') ? belong='목요예배' : originTitle.includes('어린이예배') ? belong='어린이예배' : originTitle.includes('프랜드') ? belong='어린이예배': originTitle.includes('청소년주일예배') ? belong='청소년예배' : originTitle.includes('청소년부 예배') ? belong='청소년예배' : originTitle.includes('청소년부예배') ? belong='청소년예배' : originTitle.includes('청소년 예배') ? belong='청소년예배' :originTitle.includes('청년부') ? belong='청년부예배' :  originTitle.includes('청년부예배') ? belong='청년부예배' : originTitle.includes('송구영신') ? belong='송구영신예배' : originTitle.includes('성탄예배') ? belong='성탄예배' : originTitle.includes('러브레터') ? belong='특별행사' : originTitle.includes('부활절') ? belong='주일예배' : originTitle.includes('큐티묵상') ? belong='큐티묵상' : originTitle.includes('큐티 묵상') ? belong='큐티묵상' : originTitle.includes('찬양묵상') ? belong='찬양묵상' : response.desc.includes('간증') ? belong='간증' : originTitle.includes('복음학교') ? belong='복음학교' : originTitle.includes('Gospel') ? belong='복음학교' : originTitle.includes('치유학교') ? belong='치유학교' : belong=''; 
+                
+                console.log(belong);
+
+                let worship = {
+                    originTitle: originTitle,
+                    title: response.title,
+                    verse: response.verse,
+                    speaker: response.speaker,
+                    desc: response.desc,
+                    ytUrl: ytUrl,
+                    videoId: videoId,
+                    belong: belong,
+                    author: '관리자',
+                    color: selectColorToBelong(belong),
+                    pbDate: pbDate,
+                    createdAt: pbDate,
+                    updatedAt: '1000-01-01T00:00:00.000',
                 }
-                else if(worship.belong.includes('어린이예배')) {
-                    worship = processChildren(worship);
-                } 
-                else if(worship.belong.includes('큐티묵상')) {
-                    worship = processQt(worship);
+                if (worship.desc==='설명') {
+                    
+                } else {
+                    if (worship.desc.includes('간증')) {
+                        worship = processTestimony(worship);
+                    } 
+                    else if(worship.belong.includes('목요예배') && !worship.belong.includes('어린이예배')) {
+                        worship = processThursday(worship);
+                    } 
+                    else if(worship.belong.includes('주일예배')) {
+                        worship = processSunday(worship);
+                    }
+                    else if(worship.belong.includes('어린이예배')) {
+                        worship = processChildren(worship);
+                    } 
+                    else if(worship.belong.includes('큐티묵상')) {
+                        worship = processQt(worship);
+                    }
+                    else if(worship.belong.includes('찬양묵상')) {
+                        worship = processGospel(worship);
+                    }
                 }
-                else if(worship.belong.includes('찬양묵상')) {
-                    worship = processGospel(worship);
-                }
+
+                console.log(worship);
+                const  resData= await createWorship(worship.title, worship.originTitle, worship.verse, worship.speaker, worship.desc, worship.ytUrl, worship.videoId, worship.belong, worship.author, worship.color, dayjs(worship.pbDate).add(9, "hour"), dayjs(worship.createdAt).add(9, "hour"), worship.updatedAt);
+
+                console.log('res결과:', resData);
+                console.log('LATEST WORSHIP CREATE SUCCESS!');
+                res.json(resData);
             }
-
-            console.log(worship);
-            const  resData= await createWorship(worship.title, worship.originTitle, worship.verse, worship.speaker, worship.desc, worship.ytUrl, worship.videoId, worship.belong, worship.author, worship.color, dayjs(worship.pbDate).add(9, "hour"), dayjs(worship.createdAt).add(9, "hour"), worship.updatedAt);
-
-            console.log('res결과:', resData);
-            console.log('LATEST WORSHIP CREATE SUCCESS!');
-            res.json(resData);
 
         } catch (error) {
             console.error(error);

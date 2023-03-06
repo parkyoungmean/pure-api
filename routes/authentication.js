@@ -15,6 +15,8 @@ router.post('/account', async (req, res) => {
         jwt.verify(req.body.token, process.env.JWT_SECRET, (err, decoded) => {
             if (err) {
                 if (err.name === 'TokenExpiredError') {     // 유효기간 초과
+                    console.log('토큰이 만료되었습니다.');
+                    
                     return res.status(419).json({
                         code: 419,
                         message: '토큰이 만료되었습니다',
